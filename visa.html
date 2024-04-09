@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tramifast - Visa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Solicitud de Visa</h1>
+    </header>
+    <main>
+        <form id="visaForm" action="procesar_visa.php" method="post">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required>
+            <label for="pais">País de origen:</label>
+            <input type="text" id="pais" name="pais" required>
+            <label for="motivo">Motivo de la visa:</label>
+            <textarea id="motivo" name="motivo" rows="4" required></textarea>
+            <button type="submit">Enviar solicitud</button>
+        </form>
+    </main>
+    <footer>
+        <form id="logoutForm" action="logout.php" method="post">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    </footer>
+</body>
+</html>
