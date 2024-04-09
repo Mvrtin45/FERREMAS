@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tramifast - Iniciar sesión</title>
+    <link rel="stylesheet" href="../css/miestilo.css">
+</head>
+<body>
+    <header>
+        <h1>Iniciar sesión en Tramifast</h1>
+    </header>
+    <main>
+        <form id="loginForm" action="login.php" method="post">
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Iniciar sesión</button>
+        </form>
+        <p>¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a>.</p>
+    </main>
+
+    <script>
+        
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            
+            event.preventDefault();
+
+            
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            
+            
+            var loginSuccessful = true;
+
+           
+            if (loginSuccessful) {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+
+</body>
+</html>
