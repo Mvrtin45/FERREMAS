@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tramifast - Seguimiento de Trámites</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Seguimiento de Trámites</h1>
+    </header>
+    <main>
+        <form id="seguimientoForm" action="procesar_seguimiento.php" method="post">
+            <label for="nombre_tramite">Nombre del trámite:</label>
+            <input type="text" id="nombre_tramite" name="nombre_tramite" required>
+            <label for="numero_seguimiento">Número de seguimiento:</label>
+            <input type="text" id="numero_seguimiento" name="numero_seguimiento" required>
+            <button type="submit">Buscar trámite</button>
+        </form>
+        <div id="resultadoSeguimiento">
+            
+        </div>
+    </main>
+    <footer>
+        <form id="logoutForm" action="logout.php" method="post">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    </footer>
+</body>
+</html>
