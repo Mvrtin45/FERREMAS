@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tramifast - Inicio</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
 
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">TramiFast</a>
+      <a class="navbar-brand" href="/index.html">TramiFast</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -20,47 +19,117 @@
         <ul class="navbar-nav">
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/index.html">Inicio</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="visa.html">Visa</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="cedula.html">Cedula Identidad</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="seguimiento.html">Seguimiento de Tramites</a>
-              </li>
+
               <li class="nav-item">
                 <a class="nav-link" href="contacto.html">Contacto</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="cerrar.html">Cerrar sesion</a>
+                
+                <a class="nav-link" href="cerrarsesion.html">Cerrar sesion</a>
               </li>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html"> Iniciar sesion</a>
+            </li>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="registro.html">Crear usuario </a>
+          </li>
         </ul>
       </div>
     </div>
 </nav>
 
-<div id="carouselExample" class="carousel slide" style="width: 500px;">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="/assets/img/tramite.jpg" class="d-block w-100" alt="...">
+
+
+
+<!-- BAJO EL NAVAR-->
+
+
+<div class="col-sm-12 col-md-6 col-lg-4 item">
+  <div class="card text-center">
+    <div class="card-body">
+      <div class="media">
+        <img src="img/icon/bookmark-1.png" class="img-service">
+        <div class="media-body">
+          <p class="card-text">VISA</p>
+          <p>
+            Este módulo permite denunciar delitos de HURTO,
+            DAÑOS A LA PROPIEDAD Y MALTRATO ANIMAL, con la
+            finalidad de ser derivado al Ministerio Público.
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="carousel-item">
-      <img src="/assets/img/contacto.jpg" class="d-block w-100" alt="...">
-    </div>
-    <div class="carousel-item">
-      <img src="./assets/img/contacto.jpg" class="d-block w-100" alt="...">
-    </div>
+    
+    <a href="login.html" class=" btn-cu btn-m btn-fw btn-color-estandar">
+        <span class="cl-claveunica"></span>
+        <span class="texto">Iniciar sesión</span>
+    </a>
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
 </div>
 
+
+
+
+
+
+
+<div class="col-sm-12 col-md-6 col-lg-4 item">
+  <div class="card text-center">
+      <div class="card-body">
+          <div class="media">
+                                                  <img src="https://www.comisariavirtual.cl/img/icon/agenda.png" class="img-service" width="25px">
+                                              <div class="media-body">
+                  <p class="card-text">
+                                                          CEDULA IDENTIDAD
+                                                      </p>
+                  <p></p><p>Libro de Condolencias para expresar el pesar por el fallecimiento del Teniente Emmanuel Sánchez Soto</p><p></p>
+                                                  </div>
+          </div>
+      </div>
+
+                                  <a href="login.html" class=" btn-cu btn-m btn-fw btn-color-estandar">
+                                                                                          <span class="cl-claveunica"></span>
+                      <span class="texto">Iniciar sesión</span>
+                                                                              </a>
+      
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="col-sm-12 col-md-6 col-lg-4 item">
+  <div class="card text-center">
+      <div class="card-body">
+          <div class="media">
+                                                  <img src="https://www.comisariavirtual.cl/img/icon/route.png" class="img-service" width="25px">
+                                              <div class="media-body">
+                  <p class="card-text">
+                                                          SEGUIMIENTO DE TRAMITES
+                                                      </p>
+                  <p>Este módulo permite la emisión de Salvoconducto exigible para transitar en horario de toque de queda dispuesto por la Autoridad.</p>
+                                                  </div>
+          </div>
+      </div>
+
+                                  <a href="login.html" class=" btn-cu btn-m btn-fw btn-color-estandar">
+                                                                                          <span class="cl-claveunica"></span>
+                      <span class="texto">Iniciar sesión</span>
+                                                                              </a>
+      
+  </div>
+</div>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </html>
