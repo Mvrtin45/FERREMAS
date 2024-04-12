@@ -8,6 +8,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     
     <link rel="stylesheet" href="style.css">
+    <style>
+      body{
+          background-color: linen;
+          align-items: flex-end; 
+      }
+
+      h1{
+          color: maroon;
+          text-align: center;
+      }
+
+      p{
+          text-align: center;
+      }
+      form{
+          text-align: center;
+      }
+      
+
+    </style>
+    <link rel="stylesheet" href="style_cedula.css">
+
+
 </head>
 <body>
 
@@ -55,23 +78,33 @@
     <header>
         <h1>Solicitud de Cédula de Identidad</h1>
     </header>
+
     <main>
         <form id="cedulaForm" action="procesar_cedula.php" method="post">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
-            <label for="apellido">Apellido:</label>
-            <input type="text" id="apellido" name="apellido" required>
-            <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
-            <label for="rut">Rut:</label>
-            <input type="text" id="rut" name="rut" required>
-            <button type="submit">Enviar solicitud</button>
+          <div class ="contenedor">
+            <div class="columna1"> 
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre" name="nombre" required>
+              <br><br>
+              <label for="apellido">Apellido:</label>
+              <input type="text" id="apellido" name="apellido" required>
+            </div>
+            <div class="columna2">
+              <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+              <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+              <br><br>
+              <label for="rut">Rut:</label>
+              <input type="text" id="rut" name="rut" required>
+            </div><br>
+            
+          </div>
+          <button type="submit">Enviar solicitud</button><br><br>
         </form>
     </main>
     <footer>
         <form id="logoutForm" action="logout.php" method="post">
-            <button type="submit">Cerrar sesión</button>
-            <a href="/index.html">Volver</a>
+            <button type="submit">Cerrar sesión</button><br><br>
+            <a href="/index.html">Volver</a><br><br>
 
         </form>
     </footer>

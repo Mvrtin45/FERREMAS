@@ -1,0 +1,15 @@
+.contenedor{
+    display: flex;
+    justify-content: center;
+    
+    
+    
+}
+
+.columna1 {
+    padding: 25px;
+}
+
+.columna2{
+    padding: 25px;
+}
