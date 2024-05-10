@@ -1,0 +1,23 @@
+body {
+    height: 100%;
+    background-color: linen;
+    display: flex;
+    flex-direction: column;
+}
+h2{
+  color: rgb(0, 0, 0);
+  text-align: center;
+}
+p{
+  text-align: center;
+}
+form{
+  text-align: center;
+}
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
