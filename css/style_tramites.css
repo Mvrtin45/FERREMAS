@@ -12,18 +12,15 @@ form{
     text-align: center;
 }
 /* pie de pagina*/
-footer{
-    background: #226f63;
+footer {
+    background: #343a40; /* Cambiado a un tono más oscuro */
     padding: 60px 0 30px 0;
-    margin: auto;
     overflow: hidden;
 }
-.contenedor-footer{
+.contenedor-footer {
     display: flex; 
-    width: 90%;
-    justify-content: space-evenly;
+    justify-content: space-between; /* Cambiado a space-between */
     padding-bottom: 50px;
-    margin: auto;
 }
 .content-foo{
     text-align: center;
@@ -38,32 +35,9 @@ footer{
 .contenedor-footer img{
     width: 150px;
     height: 150px;
-}
-.contenedor-footer a{
-    display: inline-block;  
-    width: 50px; 
-    height: 50px; 
-    background-size: cover; 
-    background-repeat: no-repeat; 
-    background-position: center; 
-    text-indent: -9999px; 
-}   
-.contenedor-footers{
+}  
+.contenedor-footers {
     display: flex; 
-    width: 90%;
-    justify-content: space-evenly;
+    justify-content: space-between; /* Cambiado a space-between */
     padding-bottom: 50px;
-    margin: auto;
 }
-    #boton1{
-        background-image: url('/img/instagram.png');
-    }
-    #boton2{
-        background-image: url('/img/facebook.png');
-    }
-    #boton3{
-        background-image: url('/img/whatsapp.png');
-    }
-    #boton4{
-        background-image: url('/img/twitter.png');
-    }
