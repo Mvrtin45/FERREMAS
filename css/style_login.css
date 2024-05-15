@@ -17,3 +17,33 @@ img{
     display: block;
     margin: auto;
 }
+/* PIE DE PÁGINA */
+footer {
+    background: #343a40; 
+    padding: 60px 0 30px 0;
+    overflow: hidden;
+}
+.contenedor-footer {
+    display: flex; 
+    justify-content: space-between; 
+    padding-bottom: 50px;
+}
+.content-foo {
+    text-align: center;
+    color: #ffffff;
+}
+.content-foo h4 {
+    border-bottom: 1px solid #ffffff;
+    color: #ffffff;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+.contenedor-footer img {
+    width: 150px;
+    height: 150px;
+}
+.contenedor-footers {
+    display: flex; 
+    justify-content: space-between; 
+    padding-bottom: 50px;
+}

@@ -13,31 +13,31 @@ form{
 }
 /* pie de pagina*/
 footer {
-    background: #343a40; /* Cambiado a un tono más oscuro */
+    background: #343a40; 
     padding: 60px 0 30px 0;
     overflow: hidden;
 }
 .contenedor-footer {
     display: flex; 
-    justify-content: space-between; /* Cambiado a space-between */
+    justify-content: space-between; 
     padding-bottom: 50px;
 }
-.content-foo{
+.content-foo {
     text-align: center;
     color: #ffffff;
 }
-.content-foo h4{
+.content-foo h4 {
     border-bottom: 1px solid #ffffff;
     color: #ffffff;
     padding-bottom: 5px;
     margin-bottom: 10px;
 }
-.contenedor-footer img{
+.contenedor-footer img {
     width: 150px;
     height: 150px;
-}  
+}
 .contenedor-footers {
     display: flex; 
-    justify-content: space-between; /* Cambiado a space-between */
+    justify-content: space-between; 
     padding-bottom: 50px;
 }
