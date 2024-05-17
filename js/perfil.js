@@ -1,12 +1,19 @@
-// Obtener los trámites del localStorage
-var tramites = JSON.parse(localStorage.getItem('tramites')) || [];
+$(document).ready(function() {
 
-// Obtener el elemento UL donde se mostrarán los trámites
-var listaTramites = document.getElementById('tramites-list');
+    function cargarTramitesPerfil() {
 
-// Mostrar los trámites en la lista
-tramites.forEach(function(tramite) {
-    var li = document.createElement('li');
-    li.textContent = tramite;
-    listaTramites.appendChild(li);
+        var tramitesGuardados = JSON.parse(localStorage.getItem('tramites')) || [];
+
+        var $listaTramitesPerfil = $('#tramites-list');
+
+        $listaTramitesPerfil.empty();
+
+        $.each(tramitesGuardados, function(index, tramite) {
+            var li = $('<li>').text(tramite.nombre + ' ' + tramite.apellido + ' - ' + tramite.pais + ' (' + tramite.motivo + ')');
+            $listaTramitesPerfil.append(li);
+        });
+    }
+
+    cargarTramitesPerfil();
 });
+

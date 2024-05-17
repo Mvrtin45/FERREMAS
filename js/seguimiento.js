@@ -1,44 +1,20 @@
-function buscarTramite() {
-    // Obtener los valores ingresados por el usuario
-    var nombreTramite = document.getElementById('nombre_tramite').value;
-    var numeroSeguimiento = document.getElementById('numero_seguimiento').value;
+$(document).ready(function() {
+    // Función para manejar la búsqueda de trámites
+    $('#seguimientoForm').submit(function(event) {
+        event.preventDefault(); // Evitar el envío del formulario
 
-    // Comprobar si existe un trámite con el número de seguimiento dado
-    var tramiteEncontrado = buscarTramiteEnLocalStorage(nombreTramite, numeroSeguimiento);
+        // Obtener los datos del formulario
+        var nombreTramite = $('#nombre_tramite').val();
+        var numeroSeguimiento = $('#numero_seguimiento').val();
 
-    // Mostrar el resultado de la búsqueda
-    mostrarResultado(tramiteEncontrado);
-}
+        // Aquí puedes agregar la lógica para buscar los trámites según los datos proporcionados
+        // Por ejemplo, puedes hacer una solicitud AJAX al servidor para buscar los trámites
 
-function buscarTramiteEnLocalStorage(nombreTramite, numeroSeguimiento) {
-    // Obtener los trámites almacenados en el localStorage
-    var tramites = JSON.parse(localStorage.getItem('tramites')) || [];
+        // Por ahora, solo imprimo los datos en la consola para verificar
+        console.log('Nombre del trámite:', nombreTramite);
+        console.log('Número de seguimiento:', numeroSeguimiento);
 
-    // Buscar el trámite por el número de seguimiento
-    var tramiteEncontrado = tramites.find(function(tramite) {
-        return tramite.nombre === nombreTramite && tramite.numero === numeroSeguimiento;
+        // Mostrar mensaje de búsqueda exitosa (puedes reemplazar esto con tu lógica real)
+        alert('Búsqueda de trámite exitosa: ' + nombreTramite);
     });
-
-    return tramiteEncontrado;
-}
-
-function mostrarResultado(tramiteEncontrado) {
-    var resultadoDiv = document.getElementById('resultadoBusqueda');
-
-    // Limpiar cualquier resultado previo
-    resultadoDiv.innerHTML = '';
-
-    if (tramiteEncontrado) {
-        // Mostrar los detalles del trámite encontrado
-        resultadoDiv.innerHTML = `
-            <h3>Resultado de la búsqueda:</h3>
-            <p>Nombre del trámite: ${tramiteEncontrado.nombre}</p>
-            <p>Número de seguimiento: ${tramiteEncontrado.numero}</p>
-            <!-- Agrega más detalles del trámite según tus necesidades -->
-        `;
-    } else {
-        // Mostrar un mensaje de error si no se encontró ningún trámite
-        resultadoDiv.innerHTML = '<p>No se encontró ningún trámite con los datos proporcionados.</p>';
-    }
-}
-
+});

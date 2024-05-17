@@ -1,35 +1,49 @@
-function generarNumeroSerie() {
-    // Generar un número aleatorio de 8 dígitos
-    var numeroAleatorio = Math.floor(10000000 + Math.random() * 90000000);
-    return 'TF' + numeroAleatorio; // Prefijo 'TF' seguido del número aleatorio
-}
+$(document).ready(function() {
+    // Función para manejar la solicitud de visa
+    $('#visaForm').submit(function(event) {
+        event.preventDefault(); // Evitar el envío del formulario
 
-function enviarFormularioVisa() {
-    var nombre = document.getElementById('nombre').value;
-    var apellido = document.getElementById('apellido').value;
-    var pais = document.getElementById('pais').value;
-    var motivo = document.getElementById('motivo').value;
-    
-    var numeroSerie = generarNumeroSerie();
-    
-    var solicitudVisa = {
-        numeroSerie: numeroSerie,
-        nombre: nombre,
-        apellido: apellido,
-        pais: pais,
-        motivo: motivo
-    };
+        // Obtener los datos del formulario
+        var nombre = $('#nombre').val();
+        var apellido = $('#apellido').val();
+        var pais = $('#pais').val();
+        var motivo = $('#motivo').val();
 
-    localStorage.setItem('solicitudVisa', JSON.stringify(solicitudVisa));
-    
-    alert('Su solicitud de visa ha sido enviada con éxito. Número de serie: ' + numeroSerie);
-    // Redirigir al usuario a otra página después de enviar el formulario
-    window.location.href = '/indexs/perfil.html';
-}
+        // Crear un objeto con los datos del formulario
+        var solicitudVisa = {
+            nombre: nombre,
+            apellido: apellido,
+            pais: pais,
+            motivo: motivo
+        };
 
-document.getElementById('visa-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    enviarFormularioVisa();
+        // Almacenar la solicitud de visa en el localStorage
+        var solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
+        solicitudes.push(solicitudVisa);
+        localStorage.setItem('solicitudes', JSON.stringify(solicitudes));
+
+        // Mostrar mensaje de confirmación
+        alert('Solicitud de visa enviada correctamente.');
+
+        // Limpiar el formulario
+        $('#visaForm')[0].reset();
+    });
 });
+
+$(document).ready(function() {
+    $('#visaForm').submit(function(event) {
+        event.preventDefault(); // Prevenir el envío del formulario por defecto
+r
+        // Por ahora, simularemos un envío exitoso después de 2 segundos
+        setTimeout(function() {
+            // Mostrar mensaje de éxito y ocultar formulario
+            $('#mensajeExito').show();
+            $('#visaForm').hide();
+        }, 2000);
+    });
+});
+
+
+
 
 

@@ -1,4 +1,3 @@
-// Función para registrar un nuevo usuario
 function registrarUsuario() {
     // Obtener los datos del usuario del formulario de registro
     var nombre = document.getElementById('nombre').value;

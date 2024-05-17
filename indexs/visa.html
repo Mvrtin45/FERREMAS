@@ -37,8 +37,7 @@
     <header>
         <h1>Solicitud de Visa</h1>
     </header>
-
-    <form id="visa-form">
+    <form id="visaForm" action="#" method="post">
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre" required><br>
         <label for="apellido">Apellido:</label><br>
@@ -47,9 +46,17 @@
         <input type="text" id="pais" name="pais" required><br>
         <label for="motivo">Motivo de la visa:</label><br>
         <textarea id="motivo" name="motivo" rows="4" required></textarea><br>
-        <button type="submit">Enviar solicitud</button><br>
+        <button type="submit" id="enviarSolicitudBtn">Enviar solicitud</button><br>
         <a href="/indexs/index.html">Volver</a>
+        
+        <div id="mensajeExito" style="display: none; color: green;">
+            Solicitud de visa enviada exitosamente.
+        </div>
+        <div id="mensajeError" style="display: none; color: red;">
+            Ha ocurrido un error al enviar la solicitud de visa. Por favor, inténtalo de nuevo más tarde.
+        </div>
     </form>
+    
 
     <footer class="bg-dark text-light py-5">
         <div class="container">

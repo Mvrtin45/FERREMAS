@@ -39,16 +39,14 @@
         <h1>Seguimiento de Trámites</h1>
     </header>
         <main>
-            <form id="seguimientoForm">
+            <form id="seguimientoForm" action="procesar_seguimiento.php" method="post">
                 <label for="nombre_tramite">Nombre del trámite:</label><br>
                 <input type="text" id="nombre_tramite" name="nombre_tramite" required><br>
                 <label for="numero_seguimiento">Número de seguimiento:</label><br>
                 <input type="text" id="numero_seguimiento" name="numero_seguimiento" required><br>
-                <button type="button" onclick="buscarTramite()">Buscar trámite</button><br>
+                <button type="submit">Buscar trámite</button><br>
                 <a href="/indexs/index.html">Volver</a>
-            </form>
-
-            <div id="resultadoBusqueda"></div>
+            </form>            
     </main>
     
     <footer class="bg-dark text-light py-5">
