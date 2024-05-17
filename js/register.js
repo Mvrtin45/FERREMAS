@@ -1,26 +1,27 @@
-document.getElementById('registerForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    var username = document.getElementById('username').value;
+// Función para registrar un nuevo usuario
+function registrarUsuario() {
+    // Obtener los datos del usuario del formulario de registro
+    var nombre = document.getElementById('nombre').value;
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
 
-    
-    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-        alert('Por favor, introduce un correo electrónico válido.');
-        return; 
-    }
+    // Crear un objeto para almacenar los datos del usuario
+    var nuevoUsuario = {
+        nombre: nombre,
+        email: email,
+        password: password
+    };
 
-    
-    var users = JSON.parse(localStorage.getItem('users')) || [];
+    // Obtener la lista de usuarios registrados del localStorage
+    var usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios')) || [];
 
-    
-    users.push({ username: username, email: email, password: password });
+    // Agregar el nuevo usuario a la lista
+    usuariosRegistrados.push(nuevoUsuario);
 
-    
-    localStorage.setItem('users', JSON.stringify(users));
+    // Guardar la lista actualizada en el localStorage
+    localStorage.setItem('usuarios', JSON.stringify(usuariosRegistrados));
 
-    
-    window.location.href = 'index.html';
-});
+    // Redirigir al usuario a la página de inicio de sesión
+    window.location.href = "/indexs/login.html";
+}
+
