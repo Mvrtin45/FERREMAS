@@ -19,6 +19,7 @@ $(document).ready(function() {
             }
         },
         submitHandler: function(form) {
+            addUser();
             var email = $('#email').val();
             var password = $('#password').val();
             
@@ -31,9 +32,17 @@ $(document).ready(function() {
             
             localStorage.setItem('userData', userDataJSON);
             
-            window.location.href = '/perfil.html';
+            alert('Sesión Iniciada correctamente');
+
+            return false;
         }
     });
 });
+
+function addUser(){
+    console.log('Se ingresó el Usuario')
+    let email = $('#email').val();
+    let password = $('#password').val();
+};
 
 
