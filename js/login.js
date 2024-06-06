@@ -1,26 +1,39 @@
-// Función para iniciar sesión
-function iniciarSesion() {
-    // Obtener los datos del usuario del formulario de inicio de sesión
-    var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
-
-    // Obtener la lista de usuarios registrados del localStorage
-    var usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios')) || [];
-
-    // Buscar el usuario por su correo electrónico
-    var usuarioEncontrado = usuariosRegistrados.find(function(usuario) {
-        return usuario.email === email && usuario.password === password;
+$(document).ready(function() {
+    $('#loginForm').validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            },
+            password: {
+                required: true
+            }
+        },
+        messages: {
+            email: {
+                required: 'Por favor, ingrese su correo electrónico',
+                email: 'Por favor, ingrese un correo electrónico válido'
+            },
+            password: {
+                required: 'Por favor, ingrese su contraseña'
+            }
+        },
+        submitHandler: function(form) {
+            var email = $('#email').val();
+            var password = $('#password').val();
+            
+            var userData = {
+                email: email,
+                password: password
+            };
+            
+            var userDataJSON = JSON.stringify(userData);
+            
+            localStorage.setItem('userData', userDataJSON);
+            
+            window.location.href = '/perfil.html';
+        }
     });
-
-    // Verificar si se encontró el usuario
-    if (usuarioEncontrado) {
-        // El usuario ha iniciado sesión correctamente
-        // Aquí podrías redirigirlo a la página de perfil o realizar otras acciones
-        alert("Inicio de sesión exitoso. Bienvenido, " + usuarioEncontrado.nombre + "!");
-    } else {
-        // Las credenciales son incorrectas
-        alert("Correo electrónico o contraseña incorrectos. Por favor, inténtalo de nuevo.");
-    }
-}
+});
 
 
