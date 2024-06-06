@@ -20,29 +20,32 @@ $(document).ready(function() {
         },
         submitHandler: function(form) {
             addUser();
-            var email = $('#email').val();
-            var password = $('#password').val();
-            
-            var userData = {
-                email: email,
-                password: password
-            };
-            
-            var userDataJSON = JSON.stringify(userData);
-            
-            localStorage.setItem('userData', userDataJSON);
-            
-            alert('Sesión Iniciada correctamente');
-
+            form.reset();
             return false;
         }
     });
+    loadUsers();
 });
 
 function addUser(){
-    console.log('Se ingresó el Usuario')
-    let email = $('#email').val();
-    let password = $('#password').val();
+    var email = $('#email').val();
+    var password = $('#password').val();
+    var User = { Email: email, Password: password}
+
+    saveUserToStorage(User);
 };
+
+function loadUsers(){
+    if(localStorage.getItem('Users')){
+        var Users = JSON.parse(localStorage.getItem('Users'));
+    }
+}
+
+function saveUserToStorage(User){
+    var Users = localStorage.getItem('Users') ? JSON.parse(localStorage.getItem('Users')) : [];
+    Users.push(User);
+    localStorage.setItem('Users', JSON.stringify(Users));
+}
+
 
 
