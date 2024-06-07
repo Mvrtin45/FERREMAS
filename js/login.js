@@ -1,51 +1,40 @@
-$(document).ready(function() {
-    $('#loginForm').validate({
-        rules: {
-            email: {
-                required: true,
-                email: true
-            },
-            password: {
-                required: true
-            }
-        },
-        messages: {
-            email: {
-                required: 'Por favor, ingrese su correo electrónico',
-                email: 'Por favor, ingrese un correo electrónico válido'
-            },
-            password: {
-                required: 'Por favor, ingrese su contraseña'
-            }
-        },
-        submitHandler: function(form) {
-            addUser();
-            form.reset();
-            return false;
-        }
-    });
-    loadUsers();
-});
+document.getElementById('loginButton').addEventListener('click', () => {
+    const correo = document.getElementById('correo').value;
+    const contraseña = document.getElementById('contraseña').value;
 
-function addUser(){
-    var email = $('#email').val();
-    var password = $('#password').val();
-    var User = { Email: email, Password: password}
+    // Obtener usuarios registrados del almacenamiento local
+    const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    saveUserToStorage(User);
-};
+    // Verificar si existe un usuario con el correo electrónico y la contraseña proporcionados localmente
+    const userLocal = users.find(user => user.email === correo && user.password === contraseña);
+    if (userLocal) {
+        alert('Inicio de sesión exitoso. Redirigiendo...');
+        // Redirige al usuario al archivo index.html o a donde sea que desees
+        window.location.href = '/indexs/index.html';
+    } else {
+        // Si no se encuentra en el almacenamiento local, realiza la solicitud a la API
+        const url = `https://my.api.mockaroo.com/users.json?key=1ad56380`;
 
-function loadUsers(){
-    if(localStorage.getItem('Users')){
-        var Users = JSON.parse(localStorage.getItem('Users'));
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const usuarios = data;
+                const usuarioValido = usuarios.find(usuario => usuario.email === correo);
+                if (usuarioValido) {
+                    if (usuarioValido.password === contraseña) {
+                        alert('Inicio de sesión exitoso. Redirigiendo...');
+                        // Redirige al usuario al archivo index.html
+                        window.location.href = '/indexs/index.html';
+                    } else {
+                        alert('Contraseña incorrecta. Inténtalo de nuevo.');
+                    }
+                } else {
+                    alert('Correo inválido. Inténtalo de nuevo.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener usuarios:', error);
+                alert('Ocurrió un error. Por favor, inténtalo de nuevo más tarde.');
+            });
     }
-}
-
-function saveUserToStorage(User){
-    var Users = localStorage.getItem('Users') ? JSON.parse(localStorage.getItem('Users')) : [];
-    Users.push(User);
-    localStorage.setItem('Users', JSON.stringify(Users));
-}
-
-
-
+});
