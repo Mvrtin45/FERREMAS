@@ -7,21 +7,21 @@ class Tramite(models.Model):
     fecha = models.DateField()
 
     def __str__(self):
-        return f"{self.id} : {self.nombreTramite} : {self.fecha}"
+        return f"id : {self.id} | nombretramite: {self.nombreTramite} | fecha: {self.fecha}"
     
 class Admin(models.Model):
     UserAdmin = models.CharField(max_length=10, primary_key=True, unique=True)
     contrasenaAdmin = models.CharField(max_length=10)
 
     def __str__(self):
-        return f"{self.UserAdmin} : {self.contrasenaAdmin}"
+        return f"Admin: {self.UserAdmin} | Contrasena: {self.contrasenaAdmin}"
     
 class NumeroAtencion(models.Model):
     numero = models.CharField(max_length=2)
     ubicacion = models.CharField(max_length=30)
 
     def __str__(self):
-        return f"{self.numero} : {self.ubicacion}"
+        return f"numero: {self.numero} | ubicacion: {self.ubicacion}"
 
 class TramiteVisa(models.Model):
     nombreV = models.CharField(max_length=20)
@@ -30,7 +30,7 @@ class TramiteVisa(models.Model):
     motivodeV = models.CharField(max_length=30)
 
     def __str__(self):
-        return f"{self.nombreV} : {self.apellidoV} : {self.paisV} : {self.motivodeV}"
+        return f"nombrevisa : {self.nombreV} | apellidovisa : {self.apellidoV} | paisvisa : {self.paisV} | motivodevisa : {self.motivodeV}"
 
     
 
