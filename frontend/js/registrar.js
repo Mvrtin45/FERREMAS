@@ -30,5 +30,5 @@ document.getElementById('registerButton').addEventListener('click', () => {
     alert('Registro exitoso. Ahora puedes iniciar sesión.');
 
     
-    window.location.href = '/indexs/login.html';
+    window.location.href = '/frontend/indexs/login.html';
 });
