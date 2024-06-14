@@ -10,7 +10,7 @@ document.getElementById('loginButton').addEventListener('click', () => {
     if (userLocal) {
         alert('Inicio de sesión exitoso. Redirigiendo...');
         // Redirige al usuario al archivo index.html o a donde sea que desees
-        window.location.href = '/indexs/index.html';
+        window.location.href = '/frontend/indexs/index.html';
     } else {
         // Si no se encuentra en el almacenamiento local, realiza la solicitud a la API
         const url = `https://my.api.mockaroo.com/users.json?key=1ad56380`;
@@ -24,7 +24,7 @@ document.getElementById('loginButton').addEventListener('click', () => {
                     if (usuarioValido.password === contraseña) {
                         alert('Inicio de sesión exitoso. Redirigiendo...');
                         // Redirige al usuario al archivo index.html
-                        window.location.href = '/indexs/index.html';
+                        window.location.href = '/frontend/indexs/index.html';
                     } else {
                         alert('Contraseña incorrecta. Inténtalo de nuevo.');
                     }
