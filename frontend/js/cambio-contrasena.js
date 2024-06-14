@@ -18,5 +18,5 @@ cambiarCorreoBoton.addEventListener("click", function() {
     }
 
     console.log("Correo Electrónico:", correo);
-    window.location.href = "/indexs/login.html";
+    window.location.href = "/frontend/indexs/login.html";
 });
