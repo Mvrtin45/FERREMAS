@@ -23,6 +23,15 @@ class NumeroAtencion(models.Model):
     def __str__(self):
         return f"{self.numero} : {self.ubicacion}"
 
+class TramiteVisa(models.Model):
+    nombreV = models.CharField(max_length=20)
+    apellidoV = models.CharField(max_length=30)
+    paisV = models.CharField(max_length=30)
+    motivodeV = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f"{self.nombreV} : {self.apellidoV} : {self.paisV} : {self.motivodeV}"
+
     
 
     
