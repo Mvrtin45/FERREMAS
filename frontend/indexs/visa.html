@@ -46,29 +46,22 @@
     <form id="visaForm" action="#" method="post">
         <div class="mb-3">
             <label for="nombre" class="form-label text-center">Nombre:</label>
-            <input type="text" class="form-control text-center" id="nombre" name="nombre" required>
+            <input type="text" class="form-control text-center" id="nombreV" name="nombre" required>
         </div>
         <div class="mb-3">
             <label for="apellido" class="form-label text-center">Apellido:</label>
-            <input type="text" class="form-control text-center" id="apellido" name="apellido" required>
+            <input type="text" class="form-control text-center" id="apellidoV" name="apellido" required>
         </div>
         <div class="mb-3">
             <label for="pais" class="form-label text-center">País de origen:</label>
-            <input type="text" class="form-control text-center" id="pais" name="pais" required>
+            <input type="text" class="form-control text-center" id="paisV" name="pais" required>
         </div>
         <div class="mb-3">
             <label for="motivo" class="form-label text-center">Motivo de la visa:</label>
-            <textarea class="form-control text-center" id="motivo" name="motivo" rows="4" required></textarea>
+            <textarea class="form-control text-center" id="motivo" name="motivodeV" rows="4" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Enviar solicitud</button>
         <a href="/frontend/indexs/index.html">Volver</a>
-
-        <div id="mensajeExito" style="display: none; color: green;">
-            Solicitud de visa enviada exitosamente.
-        </div>
-        <div id="mensajeError" style="display: none; color: red;">
-            Ha ocurrido un error al enviar la solicitud de visa. Por favor, inténtalo de nuevo más tarde.
-        </div>
     </form>
 
 
