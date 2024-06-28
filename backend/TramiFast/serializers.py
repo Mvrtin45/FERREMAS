@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Tramite, Admin, NumeroAtencion, TramiteVisa
+from .models import Tramite, Admin, NumeroAtencion, TramiteVisa , TramiteCedula
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,4 +25,9 @@ class NumeroAtencionSerializer(serializers.ModelSerializer):
 class TramiteVisaSerializer(serializers.ModelSerializer):
     class Meta: 
         model = TramiteVisa 
+        fields = '__all__'
+
+class TramiteCedulaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TramiteCedula
         fields = '__all__'

@@ -1,11 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import AdminViewSet, TramiteViewSet, TramiteListView, NumeroAtencionViewSet, UserViewSet, TramiteVisaViewSet, TramiteVisaListView
+from .views import AdminViewSet, TramiteCedulaViewSet, TramiteListView, NumeroAtencionViewSet, UserViewSet, TramiteVisaViewSet, TramiteVisaListView
 from . import views
 
 router = DefaultRouter()
 router.register(r'admin', AdminViewSet)
-router.register(r'tramite', TramiteViewSet, basename='tramite')
+router.register(r'tramitecedula', TramiteCedulaViewSet, basename='tramitecedula')
 router.register(r'numeroatencion', NumeroAtencionViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'tramitevisa', TramiteVisaViewSet)

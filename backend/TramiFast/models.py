@@ -31,6 +31,16 @@ class TramiteVisa(models.Model):
 
     def __str__(self):
         return f"nombrevisa : {self.nombreV} | apellidovisa : {self.apellidoV} | paisvisa : {self.paisV} | motivodevisa : {self.motivodeV}"
+    
+class TramiteCedula(models.Model):
+    nombreC = models.CharField(max_length=100)
+    apellidoC = models.CharField(max_length=100)
+    rutC = models.CharField(max_length=10, unique=True)  # RUT debe ser único
+    fecha_nacimientoC = models.DateField()
+    direccionC = models.TextField()
+
+    def __str__(self):
+        return f" nombre : {self.nombreC} | apellido : {self.apellidoC} | rut : {self.rutC} | fecha_nacimiento : {self.fecha_nacimientoC} | direccion : {self.direccionC}"
 
     
 

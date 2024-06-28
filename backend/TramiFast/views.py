@@ -1,9 +1,9 @@
 from rest_framework import viewsets, generics, status
 from rest_framework.decorators import api_view
-from .models import Tramite, Admin, NumeroAtencion, TramiteVisa
+from .models import Tramite, Admin, NumeroAtencion, TramiteVisa, TramiteCedula
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from .serializers import TramiteSerializer, AdminSerializer, NumeroAtencionSerializer, UserSerializer, TramiteVisaSerializer
+from .serializers import TramiteSerializer, AdminSerializer, NumeroAtencionSerializer, UserSerializer, TramiteVisaSerializer, TramiteCedulaSerializer
 
 # Create your views here.
 class TramiteViewSet(viewsets.ModelViewSet):
@@ -71,3 +71,15 @@ class TramiteVisaListView(generics.ListAPIView):
         if nombreV is not None:
             return TramiteVisa.objects.filter(nombreV=nombreV)
         return TramiteVisa.objects.all()
+
+class TramiteCedulaViewSet(viewsets.ModelViewSet):
+    queryset = TramiteCedula.objects.all()
+    serializer_class = TramiteCedulaSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
