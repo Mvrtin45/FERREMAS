@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tramifast - Visa</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="/frontend/js/visa.js" defer></script>
     <link rel="stylesheet" href="/frontend/css/style_visa.css">
     <link rel="stylesheet" href="/frontend/css/footer.css">
@@ -47,19 +48,19 @@
     <form id="visaForm" action="#" method="post">
         <div class="mb-3">
             <label for="nombre" class="form-label text-center">Nombre:</label>
-            <input type="text" class="form-control text-center" id="nombreV" name="nombre" required>
+            <input type="text" class="form-control text-center" id="nombreV" name="nombreV" required>
         </div>
         <div class="mb-3">
             <label for="apellido" class="form-label text-center">Apellido:</label>
-            <input type="text" class="form-control text-center" id="apellidoV" name="apellido" required>
+            <input type="text" class="form-control text-center" id="apellidoV" name="apellidoV" required>
         </div>
         <div class="mb-3">
             <label for="pais" class="form-label text-center">País de origen:</label>
-            <input type="text" class="form-control text-center" id="paisV" name="pais" required>
+            <input type="text" class="form-control text-center" id="paisV" name="paisV" required>
         </div>
         <div class="mb-3">
             <label for="motivo" class="form-label text-center">Motivo de la visa:</label>
-            <textarea class="form-control text-center" id="motivo" name="motivodeV" rows="4" required></textarea>
+            <textarea class="form-control text-center" id="motivodeV" name="motivodeV" rows="4" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Enviar solicitud</button>
         <a href="/frontend/indexs/index.html">Volver</a>
@@ -102,7 +103,6 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybBogGz6Yk4U5SOa8pGoxUzB+eFQnQuNfHxCU+2k4F6p2kg+M" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 </body>
 </html>
 
