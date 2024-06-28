@@ -26,8 +26,8 @@
 }
 .contenedor .card{
     width: 370px;
-    height: 320px;
-    border-radius:10px;
+    height: auto; 
+    border-radius: 10px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     margin: 20px;
@@ -36,7 +36,7 @@
 .contenedor .card img{
     display: block; 
     width: 100%; 
-    height: auto; 
+    height: auto;  
 }
 .contenedor .card a{
     font-weight: 400;
@@ -48,6 +48,25 @@
     padding: .75rem 1.25rem;
 }
 .card .content-foot{
-    background-color: #226f63;
+    background-color: #349ac2;
     text-align: center;
+    padding: 15px;
+}
+.info1, .info2 {
+    color: #fff;
+    font-size: 16px;
+    margin-bottom: 0px;
+}
+.card .btn-success {
+    background-color: #315098;
+    color: #ffffff;
+    border: none;
+    padding: 8px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.card .btn-success:hover {
+    background-color: #213736;
 }
