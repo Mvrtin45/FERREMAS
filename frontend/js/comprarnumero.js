@@ -1,49 +1,73 @@
 $(document).ready(function() {
+    // Inicializar carrito
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+    // Validación del formulario de pago
     $("#formulario").validate({
         rules: {
             numeroTarjeta: {
-                required: true, 
+                required: true
             },
             nombreTitular: {
                 required: true
             },
             fechaExpiracion: {
-                required: true,
-                date: true  // Validación de fecha
+                required: true
             },
             codigoSeguridad: {
-                required: true,
-                digits: true,  // Solo números
-                minlength: 3,  // Longitud mínima
-                maxlength: 4   // Longitud máxima
+                required: true
             }
         },
         messages: {
             numeroTarjeta: {
-                required: "Por favor ingresa el número de tarjeta",
+                required: "Por favor ingresa el número de tarjeta"
             },
             nombreTitular: {
                 required: "Por favor ingresa el nombre del titular de la tarjeta"
             },
             fechaExpiracion: {
-                required: "Por favor ingresa la fecha de expiración",
-                date: "Por favor ingresa una fecha válida"
+                required: "Por favor ingresa la fecha de expiración"
             },
             codigoSeguridad: {
-                required: "Por favor ingresa el código de seguridad",
-                digits: "Por favor ingresa solo números para el CVV",
-                minlength: "El CVV debe tener al menos 3 caracteres",
-                maxlength: "El CVV no debe tener más de 4 caracteres"
+                required: "Por favor ingresa el código de seguridad"
             }
         },
         submitHandler: function(form) {
-            localStorage.setItem('numeroTarjeta', $('#numeroTarjeta').val());
-            localStorage.setItem('nombreTitular', $('#nombreTitular').val());
-            localStorage.setItem('fechaExpiracion', $('#fechaExpiracion').val());
-            localStorage.setItem('codigoSeguridad', $('#codigoSeguridad').val());
-            alert("¡Compra Exitosa!. Redirigiendo...");
-            // Redirigir a la página de número de atención
-            window.location.href = '/frontend/indexs/numerodeatencion.html';
+            const numeroTarjeta = $('#numeroTarjeta').val();
+            const nombreTitular = $('#nombreTitular').val();
+            const fechaExpiracion = $('#fechaExpiracion').val();
+            const codigoSeguridad = $('#codigoSeguridad').val();
+
+            // Aquí puedes agregar lógica para procesar el pago, si es necesario
+
+            const tramite = {
+                nombre: 'Trámite de Atención',
+                precio: 5000,
+                numeroAtencion: generarNumeroAtencion(),
+                cantidad: 1
+            };
+
+            carrito.push(tramite);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+
+            mostrarAlerta();
+
+            setTimeout(() => {
+                window.location.href = 'numerodeatencion.html';
+            }, 3000);
         }
     });
+
+    function generarNumeroAtencion() {
+        return Math.floor(Math.random() * (10000 - 1000 + 1)) + 1000; // Genera un número aleatorio entre 1000 y 10000
+    }
+
+    function mostrarAlerta() {
+        alert('Pago exitoso');
+    }
+
+    $('#enviarSolicitud').on('click', function() {
+        $("#formulario").submit();
+    });
 });
+

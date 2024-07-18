@@ -1,14 +1,5 @@
-const form = document.getElementById('visaForm');
-form.addEventListener('submit', function (event) {
-    event.preventDefault();
-    const formData = new FormData(form);
-    const data = {};
-    formData.forEach((value, key) => {
-        data[key] = value;
-    });
-});
-
 $(document).ready(function() {
+    // Validación del formulario
     $("#visaForm").validate({
         rules: {
             nombreV: {
@@ -39,12 +30,22 @@ $(document).ready(function() {
             }
         },
         submitHandler: function(form) {
-            // Aquí manejas el envío del formulario con AJAX
-            var data = {
+            // Recolectar datos del formulario
+            const datos = $(form).serializeArray();
+            const item = {};
+            datos.forEach(field => item[field.name] = field.value);
+
+            // Guardar en el carrito
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.push(item);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+
+            // Enviar la solicitud AJAX
+            const data = {
                 nombreV: $("#nombreV").val(),
                 apellidoV: $("#apellidoV").val(),
                 paisV: $("#paisV").val(),
-                motivodeV: $("#motivodeV").val() // Asegúrate de que el ID coincida aquí
+                motivodeV: $("#motivodeV").val()
             };
             console.log(data); // Verifica los datos que estás enviando
 
@@ -56,6 +57,7 @@ $(document).ready(function() {
                 success: function(response) {
                     alert("Trámite exitoso!");
                     console.log(response); // Muestra la respuesta del servidor en la consola
+                    window.location.href = 'carrito.html'; // Redirige al carrito
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
@@ -66,3 +68,4 @@ $(document).ready(function() {
         }
     });
 });
+
