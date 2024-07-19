@@ -1,15 +1,4 @@
-const form = document.getElementById('cedulaForm');
-form.addEventListener('submit', function (event) {
-    event.preventDefault();
-    const formData = new FormData(form);
-    const data = {};
-    formData.forEach((value, key) => {
-        data[key] = value;
-    });
-});
-
 $(document).ready(function() {
-    console.log("Documento listo. Iniciando validación...");
     $("#cedulaForm").validate({
         rules: {
             nombreC: {
@@ -48,15 +37,25 @@ $(document).ready(function() {
             }
         },
         submitHandler: function(form) {
-            console.log("Formulario validado. Enviando datos...");
-            var data = {
+            // Recolectar datos del formulario
+            const datos = $(form).serializeArray();
+            const item = {};
+            datos.forEach(field => item[field.name] = field.value);
+
+            // Guardar en el carrito
+            let carrito = JSON.parse(localStorage.getItem('carritoCedula')) || [];
+            carrito.push(item);
+            localStorage.setItem('carritoCedula', JSON.stringify(carrito));
+
+            // Enviar la solicitud AJAX
+            const data = {
                 nombreC: $("#nombreC").val(),
                 apellidoC: $("#apellidoC").val(),
                 rutC: $("#rutC").val(),
                 fecha_nacimientoC: $("#fecha_nacimientoC").val(),
                 direccionC: $("#direccionC").val()
             };
-            console.log("Datos a enviar:", data);
+
             $.ajax({
                 url: "http://127.0.0.1:8000/api/tramitecedula/",
                 type: "POST",
@@ -65,10 +64,12 @@ $(document).ready(function() {
                 success: function(response) {
                     alert("Trámite exitoso!");
                 },
-                error: function(response) {
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
                     alert("Error en el trámite");
                 }
             });
+
             return false; // Evita que el formulario se envíe automáticamente
         }
     });

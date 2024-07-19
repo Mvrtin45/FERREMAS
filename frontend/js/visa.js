@@ -35,11 +35,6 @@ $(document).ready(function() {
             const item = {};
             datos.forEach(field => item[field.name] = field.value);
 
-            // Guardar en el carrito
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            carrito.push(item);
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-
             // Enviar la solicitud AJAX
             const data = {
                 nombreV: $("#nombreV").val(),
@@ -55,9 +50,16 @@ $(document).ready(function() {
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success: function(response) {
+                    // Guardar en el carrito solo si la solicitud es exitosa
+                    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+                    carrito.push(response); // Guarda la respuesta del servidor en lugar del objeto local
+                    localStorage.setItem('carrito', JSON.stringify(carrito));
+                    
+                    // Confirmar el contenido del carrito en la consola
+                    console.log('Contenido del carrito:', carrito);
+
                     alert("Trámite exitoso!");
-                    console.log(response); // Muestra la respuesta del servidor en la consola
-                    window.location.href = 'carrito.html'; // Redirige al carrito
+                    console.log(response); // Muestra la respuesta del servidor en la consola 
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
@@ -68,4 +70,6 @@ $(document).ready(function() {
         }
     });
 });
+
+
 
