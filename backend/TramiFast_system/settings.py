@@ -63,6 +63,8 @@ CORS_ALLOWED_ORIGINS = [
 
 ROOT_URLCONF = 'TramiFast_system.urls'
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

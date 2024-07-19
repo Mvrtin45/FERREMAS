@@ -15,7 +15,10 @@ $(document).ready(function() {
             const precio = $('<td></td>').text('$4000');
 
             const acciones = $('<td></td>');
-            const eliminarBtn = $('<button></button>').addClass('btn btn-danger').text('Eliminar').on('click', () => eliminarDelCarrito(item.id));
+            const eliminarBtn = $('<button></button>')
+                .addClass('btn btn-danger eliminar-btn')
+                .text('Eliminar')
+                .data('id', item.id); // Asegúrate de que el ID esté correctamente asignado
             acciones.append(eliminarBtn);
 
             row.append(nombre, apellido, tramite, precio, acciones);
@@ -29,14 +32,37 @@ $(document).ready(function() {
     }
 
     function eliminarDelCarrito(id) {
-        carrito = carrito.filter(item => item.id !== id);
-        localStorage.setItem('carritoCedula', JSON.stringify(carrito));
-        actualizarCarrito();
+        if (id) { // Verifica que el ID no sea undefined o null
+            $.ajax({
+                url: `http://127.0.0.1:8000/api/tramitecedula/${id}/`,
+                type: 'DELETE',
+                success: function(response) {
+                    alert('Trámite de cédula eliminado correctamente');
+                    // Actualiza el carrito en el localStorage y en la interfaz de usuario
+                    carrito = carrito.filter(item => item.id !== id);
+                    localStorage.setItem('carritoCedula', JSON.stringify(carrito));
+                    actualizarCarrito();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Error al eliminar el trámite de cédula');
+                }
+            });
+        } else {
+            alert('ID del trámite no definido');
+        }
     }
 
-    $('#pagarBtn').on('click', function() {
-        window.location.href = 'comprarnumero.html';
+    // Manejo del clic en el botón de eliminar
+    $('#carrito-body').on('click', '.eliminar-btn', function() {
+        const tramiteId = $(this).data('id'); // Recupera el ID del botón
+
+        if (confirm('¿Estás seguro de que deseas eliminar este trámite de cédula?')) {
+            eliminarDelCarrito(tramiteId);
+        }
     });
 
     actualizarCarrito();
 });
+
+

@@ -31,13 +31,28 @@ $(document).ready(function() {
     }
 
     function eliminarDelCarrito(id) {
-        carrito = carrito.filter(item => item.id !== id);
-        localStorage.setItem('carrito', JSON.stringify(carrito));
-        actualizarCarrito();
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/tramitevisa/${id}/`,
+            type: 'DELETE',
+            success: function(response) {
+                alert('Trámite de visa eliminado correctamente');
+                carrito = carrito.filter(item => item.id !== id);
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+                actualizarCarrito();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                alert('Error al eliminar el trámite de visa');
+            }
+        });
     }
-
-    $('#pagarBtn').on('click', function() {
-        window.location.href = 'comprarnumero.html';
+    
+    $('#carrito-body').on('click', '.eliminar-btn', function() {
+        const tramiteId = $(this).data('id');
+    
+        if (confirm('¿Estás seguro de que deseas eliminar este trámite de visa?')) {
+            eliminarDelCarrito(tramiteId);
+        }
     });
 
     actualizarCarrito();

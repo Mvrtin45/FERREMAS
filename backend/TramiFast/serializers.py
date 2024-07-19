@@ -23,8 +23,8 @@ class NumeroAtencionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TramiteVisaSerializer(serializers.ModelSerializer):
-    class Meta: 
-        model = TramiteVisa 
+    class Meta:
+        model = TramiteVisa
         fields = '__all__'
 
 class TramiteCedulaSerializer(serializers.ModelSerializer):

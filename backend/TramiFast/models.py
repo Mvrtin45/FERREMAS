@@ -33,9 +33,10 @@ class TramiteVisa(models.Model):
         return f"nombrevisa : {self.nombreV} | apellidovisa : {self.apellidoV} | paisvisa : {self.paisV} | motivodevisa : {self.motivodeV}"
     
 class TramiteCedula(models.Model):
+    id = models.AutoField(primary_key=True)
     nombreC = models.CharField(max_length=100)
     apellidoC = models.CharField(max_length=100)
-    rutC = models.CharField(max_length=10, unique=True)  # RUT debe ser único
+    rutC = models.CharField(max_length=10, unique=True)  
     fecha_nacimientoC = models.DateField()
     direccionC = models.TextField()
 
