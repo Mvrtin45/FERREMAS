@@ -5,7 +5,7 @@ from TramiFast.views import TramiteVisaViewSet, TramiteVisaListView, NumeroAtenc
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/tramitecedula/<int:id>/', TramiteCedulaDetail.as_view(), name='tramitecedula-detail'),
-    path('api/tramitevisa/<int:id>/', TramiteVisaDetail.as_view(), name='tramitevisa-detail'),
+    path('api/tramitevisa/<int:pk>/', TramiteVisaDetail.as_view(), name='tramitevisa-detail'),
     path('api/tramitecedula/', TramiteCedulaViewSet.as_view({'get': 'list', 'post': 'create'}), name='tramitecedula'),
     path('api/numeroatencion/', NumeroAtencionViewSet.as_view({'get': 'list', 'post': 'create'}), name='numeroatencion'),
     path('api/users/', UserViewSet.as_view({'get': 'list', 'post': 'create'}), name='users'),

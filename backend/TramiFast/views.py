@@ -6,9 +6,8 @@ from .serializers import TramiteSerializer, AdminSerializer, NumeroAtencionSeria
 
 # Create your views here.
 class TramiteVisaDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = TramiteCedula.objects.all()
-    serializer_class = TramiteCedulaSerializer
-    lookup_field = 'id'
+    queryset = TramiteVisa.objects.all()
+    serializer_class = TramiteVisaSerializer
 
 class TramiteCedulaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = TramiteCedula.objects.all()

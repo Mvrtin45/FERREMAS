@@ -31,28 +31,23 @@ $(document).ready(function() {
     }
 
     function eliminarDelCarrito(id) {
+        console.log(`Eliminando tramite con ID: ${id}`);
         $.ajax({
-            url: `http://127.0.0.1:8000/api/tramitevisa/${id}/`,
+            url: `http://127.0.0.1:8000/api/tramitevisa/${id}/`, // Asegúrate de que esta URL es correcta
             type: 'DELETE',
-            success: function(response) {
-                alert('Trámite de visa eliminado correctamente');
-                carrito = carrito.filter(item => item.id !== id);
-                localStorage.setItem('carrito', JSON.stringify(carrito));
-                actualizarCarrito();
+            success: function(result) {
+                console.log('Trámite eliminado');
+                // Actualiza el carrito después de la eliminación
             },
             error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-                alert('Error al eliminar el trámite de visa');
+                console.error(`Error al eliminar el trámite: ${xhr.responseText}`);
             }
         });
     }
     
-    $('#carrito-body').on('click', '.eliminar-btn', function() {
-        const tramiteId = $(this).data('id');
-    
-        if (confirm('¿Estás seguro de que deseas eliminar este trámite de visa?')) {
-            eliminarDelCarrito(tramiteId);
-        }
+    $(document).on('click', '.eliminar-btn', function() {
+        var id = $(this).data('id');
+        eliminarDelCarrito(id);
     });
 
     actualizarCarrito();
