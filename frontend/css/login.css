@@ -3,7 +3,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('/frontend/img/pag.png'); 
+    background-image: url('/frontend/img/fondo.png'); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

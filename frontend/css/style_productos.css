@@ -1,22 +1,19 @@
-/* NAVBAR */
+/* NAV BAR */
 .navbar {
     background-color: #f8f9fa;
     padding-top: 10px;
     padding-bottom: 10px;
 }
-
 .navbar-brand {
     font-size: 24px;
     font-weight: bold;
-    color: #ffffff; /* Color blanco para texto */
+    color: #343a40;
 }
-
 .navbar-nav .nav-link {
     font-size: 18px;
     margin-right: 20px;
-    color: #ffffff; /* Color blanco para enlaces */
+    color: #343a40;
 }
-
 /* PRODUCTOS */
 .container-productos {
     margin-top: 30px;
@@ -25,7 +22,7 @@
 .card {
     max-width: 100%;
     min-height: 420px;
-    max-height: 420px;
+    max-height: 450px;
     border-radius: 10px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
     overflow: hidden;
