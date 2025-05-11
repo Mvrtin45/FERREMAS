@@ -1,72 +1,70 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const ordenesPendientes = [
-      { id: 1, cliente: "Juan Pérez", productos: ["Martillo", "Clavos"] },
-      { id: 2, cliente: "Ana Díaz", productos: ["Destornillador", "Tornillos"] }
-    ];
-  
-    const ordenesEnPreparacion = [];
-    const ordenesListas = [];
-  
-    const renderOrdenes = () => {
-      const contenedorPendientes = document.getElementById("listaOrdenesPendientes");
-      const contenedorPreparacion = document.getElementById("listaOrdenesPreparacion");
-      const contenedorListas = document.getElementById("listaOrdenesListas");
-  
-      contenedorPendientes.innerHTML = "";
-      contenedorPreparacion.innerHTML = "";
-      contenedorListas.innerHTML = "";
-  
+  const ordenesPendientes = [
+      { id: 1, cliente: "Juan Pérez", productos: ["Martillo", "Clavos"], estado: "Pendiente" },
+      { id: 2, cliente: "Ana Díaz", productos: ["Destornillador", "Tornillos"], estado: "Pendiente" }
+  ];
+
+  const ordenesEnPreparacion = [];
+  const ordenesListas = [];
+
+  const tabla = document.getElementById("tablaPedidos");
+
+  const renderTabla = () => {
+      tabla.innerHTML = "";
+
+      const renderFila = (orden, accionesHTML) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+              <td>${orden.id}</td>
+              <td>${orden.cliente}</td>
+              <td>${orden.productos.join(", ")}</td>
+              <td>${orden.estado}</td>
+              <td>${accionesHTML}</td>
+          `;
+          tabla.appendChild(tr);
+      };
+
       ordenesPendientes.forEach(orden => {
-        const div = document.createElement("div");
-        div.className = "orden";
-        div.innerHTML = `
-          <strong>Cliente:</strong> ${orden.cliente}<br>
-          <strong>Productos:</strong> ${orden.productos.join(", ")}<br>
-          <button onclick="aceptarOrden(${orden.id})">Aceptar y Preparar</button>
-        `;
-        contenedorPendientes.appendChild(div);
+          renderFila(
+              orden,
+              `<button class="btn btn-sm btn-warning" onclick="aceptarOrden(${orden.id})">Aceptar y Preparar</button>`
+          );
       });
-  
+
       ordenesEnPreparacion.forEach(orden => {
-        const div = document.createElement("div");
-        div.className = "orden";
-        div.innerHTML = `
-          <strong>Cliente:</strong> ${orden.cliente}<br>
-          <strong>Productos:</strong> ${orden.productos.join(", ")}<br>
-          <button onclick="marcarComoLista(${orden.id})">Marcar como Lista</button>
-        `;
-        contenedorPreparacion.appendChild(div);
+          renderFila(
+              orden,
+              `<button class="btn btn-sm btn-success" onclick="marcarComoLista(${orden.id})">Marcar como Lista</button>`
+          );
       });
-  
+
       ordenesListas.forEach(orden => {
-        const div = document.createElement("div");
-        div.className = "orden";
-        div.innerHTML = `
-          <strong>Cliente:</strong> ${orden.cliente}<br>
-          <strong>Productos:</strong> ${orden.productos.join(", ")}<br>
-          <span>Listo para entrega</span>
-        `;
-        contenedorListas.appendChild(div);
+          renderFila(
+              orden,
+              `<span class="badge bg-secondary">Listo para entrega</span>`
+          );
       });
-    };
-  
-    window.aceptarOrden = (id) => {
+  };
+
+  window.aceptarOrden = (id) => {
       const index = ordenesPendientes.findIndex(o => o.id === id);
       if (index !== -1) {
-        const orden = ordenesPendientes.splice(index, 1)[0];
-        ordenesEnPreparacion.push(orden);
-        renderOrdenes();
+          const orden = ordenesPendientes.splice(index, 1)[0];
+          orden.estado = "En preparación";
+          ordenesEnPreparacion.push(orden);
+          renderTabla();
       }
-    };
-  
-    window.marcarComoLista = (id) => {
+  };
+
+  window.marcarComoLista = (id) => {
       const index = ordenesEnPreparacion.findIndex(o => o.id === id);
       if (index !== -1) {
-        const orden = ordenesEnPreparacion.splice(index, 1)[0];
-        ordenesListas.push(orden);
-        renderOrdenes();
+          const orden = ordenesEnPreparacion.splice(index, 1)[0];
+          orden.estado = "Lista para entrega";
+          ordenesListas.push(orden);
+          renderTabla();
       }
-    };
-  
-    renderOrdenes();
-  });
+  };
+
+  renderTabla();
+});
