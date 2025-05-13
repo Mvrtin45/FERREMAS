@@ -1,18 +1,18 @@
 /* NAV BAR */
 .navbar {
-  background-color: #000000;
-  padding-top: 10px;
-  padding-bottom: 10px;
+    background-color: #f8f9fa;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .navbar-brand {
-  font-size: 24px;
-  font-weight: bold;
-  color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    color: #343a40;
 }
 .navbar-nav .nav-link {
-  font-size: 18px;
-  margin-right: 20px;
-  color: #ffffff;
+    font-size: 18px;
+    margin-right: 20px;
+    color: #343a40;
 }
 
 /* Contenedor principal de contacto */

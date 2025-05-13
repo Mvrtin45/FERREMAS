@@ -4,31 +4,61 @@ document.addEventListener("DOMContentLoaded", function () {
             id: 1,
             nombre: "Taladro Eléctrico",
             precio: 25990,
-            imagen: "/frontend/img/taladro.jpg"
+            imagen: "/frontend/img/Herramientas/taladro.png"
         },
         {
             id: 2,
-            nombre: "Caja de Herramientas",
-            precio: 18990,
-            imagen: "/frontend/img/caja_herramientas.jpg"
+            nombre: "Martillo de Acero",
+            precio: 11990,
+            imagen: "/frontend/img/Herramientas/martilloacero.png"
         },
         {
             id: 3,
-            nombre: "Destornillador Eléctrico",
-            precio: 14990,
-            imagen: "/frontend/img/destornillador.jpg"
+            nombre: "Juego de Destornilladores",
+            precio: 9990,
+            imagen: "/frontend/img/Herramientas/setdestornilladores.png"
         },
         {
             id: 4,
-            nombre: "Lijadora Orbital",
-            precio: 21990,
-            imagen: "/frontend/img/lijadora.jpg"
+            nombre: "Sierra Circular Eléctrica",
+            precio: 35990,
+            imagen: "/frontend/img/Herramientas/sierraelectrica.png"
         },
         {
             id: 5,
-            nombre: "Martillo Antivibración",
+            nombre: "Llave Inglesa",
             precio: 8990,
-            imagen: "/frontend/img/martillo.jpg"
+            imagen: "/frontend/img/Herramientas/llaveinglesa.png"
+        },
+        {
+            id: 6,
+            nombre: "Cinta Métrica",
+            precio: 5990,
+            imagen: "/frontend/img/Herramientas/cintametrica.png"
+        },
+        {
+            id: 7,
+            nombre: "Taladro Percutor",
+            precio: 29990,
+            imagen: "/frontend/img/Herramientas/taladropercutor.png"
+        },
+        {
+            id: 8,
+            nombre: "Caja de Herramientas",
+            precio: 19990,
+            imagen: "/frontend/img/Herramientas/cajaherramientas.png"
+        },
+        {
+            id: 9,
+            nombre: "Esmeril Angular",
+            precio: 39990,
+            imagen: "/frontend/img/Herramientas/esmerilangular.png"
+        },
+        {
+            id: 10,
+            nombre: "Pintura Exterior",
+            precio: 22990,
+            imagen: "/frontend/img/Herramientas/pinturaexterior.png"
         }
     ];
 
@@ -36,25 +66,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
     productos.forEach(producto => {
         const card = document.createElement("div");
-        card.classList.add("col-md-4", "mb-4");
+        card.classList.add("col");
         card.innerHTML = `
             <div class="card h-100">
                 <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">${producto.nombre}</h5>
+                <div class="card-body text-center">
+                    <h6 class="card-title">${producto.nombre}</h6>
                     <p class="card-text">$${producto.precio.toLocaleString()}</p>
-                    <button class="btn btn-primary mt-auto agregar-carrito" data-id="${producto.id}">Agregar al carrito</button>
+                    <a href="/frontend/indexs/detalle.html?id=${producto.id}" class="btn btn-primary btn-sm">Ver Detalles</a>
+                    <button class="btn btn-success btn-sm agregar-carrito"
+                        data-id="${producto.id}"
+                        data-nombre="${producto.nombre}"
+                        data-precio="${producto.precio}"
+                        data-imagen="${producto.imagen}">
+                        Agregar al carrito
+                    </button>
                 </div>
             </div>
         `;
         productosContainer.appendChild(card);
     });
 
-    // Evento para botones "Agregar al carrito"
+    // Agregar al carrito
     productosContainer.addEventListener("click", function (e) {
         if (e.target.classList.contains("agregar-carrito")) {
-            const idProducto = parseInt(e.target.getAttribute("data-id"));
-            const producto = productos.find(p => p.id === idProducto);
+            const button = e.target;
+            const producto = {
+                id: parseInt(button.getAttribute("data-id")),
+                nombre: button.getAttribute("data-nombre"),
+                precio: parseInt(button.getAttribute("data-precio")),
+                imagen: button.getAttribute("data-imagen")
+            };
             agregarAlCarrito(producto);
         }
     });
