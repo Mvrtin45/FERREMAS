@@ -23,3 +23,12 @@ class DetallePedido(models.Model):
     cantidad = models.PositiveIntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2)
+
+class Cliente(models.Model):
+    rut = models.CharField(max_length=9, primary_key=True, unique=True)
+    nombre = models.CharField(max_length=50)
+    apellido = models.CharField(max_length=50)
+    telefono = models.CharField(max_length=15)
+    direccion = models.CharField(max_length=255)
+
+

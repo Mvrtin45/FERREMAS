@@ -1,13 +1,21 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserSerializer
+from .views import UserViewSet, PedidoViewSet, HerramientaViewSet, CategoriaViewSet, pedidos_View
 from . import views
+from rest_framework import routers
+
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
+router.register(r'Pedido', PedidoViewSet)
+router.register(r'Herramienta', HerramientaViewSet)
+router.register(r'Categoria', CategoriaViewSet)
 
 
-
+urlpatterns = [
+    path('api/', include(router.urls)),
+     path('pedidos/', pedidos_View, name='pedidos'),
+]
 
 
 
