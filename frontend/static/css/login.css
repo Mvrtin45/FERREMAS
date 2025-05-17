@@ -3,31 +3,31 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('/frontend/img/fondo.png');
+    background-image: url('../img/fondo.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #fff;
+    background-color: #fff; 
+    
 }
 
 .formulario {
-    width: 320px;
-    padding: 25px;
-    background: rgba(0, 0, 0, 0.8);
+    width: 300px;
+    padding: 20px;
+    background: rgba(0, 0,0.8); 
     color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 12px #aaa;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px #aaa;
 }
 
-.formulario h1,
-.formulario h2 {
+.formulario h1 {
     text-align: center;
     margin-bottom: 20px;
 }
 
 .formulario label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     opacity: 0.7;
 }
 
@@ -39,13 +39,12 @@ body {
     padding: 10px;
     margin-bottom: 15px;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
 }
 
 .formulario input[type=button] {
     background-color: #fff;
     color: #000;
-    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
@@ -57,20 +56,14 @@ body {
 
 .iniciarSesion {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .iniciarSesion a {
     color: #fff;
     text-decoration: none;
-    font-size: 14px;
 }
 
 .iniciarSesion a:hover {
     text-decoration: underline;
-}
-
-/* Espaciado adicional si aparece el segundo formulario */
-#changePasswordSection {
-    margin-top: 25px;
 }

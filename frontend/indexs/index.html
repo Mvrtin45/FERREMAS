@@ -1,12 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FerreMas</title>
-    <link rel="icon" type="image/png" href="/frontend/img/logo.jpg">
-    <link rel="stylesheet" href="/frontend/css/style_index.css">
-    <link rel="stylesheet" href="/frontend/css/footer.css">
+    <link rel="icon" type="image/png" href="{% static 'img/logo.jpg' %}">
+    <link rel="stylesheet" href="{% static 'css/style_index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -20,16 +21,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/frontend/indexs/index.html">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="/frontend/indexs/productos.html">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="/frontend/indexs/contacto.html">Contacto</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="/frontend/indexs/login.html">Iniciar Sesión</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="/frontend/indexs/carrito.html">Carrito</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'productos' %}">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'contacto' %}">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'login' %}">Iniciar Sesión</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'carrito' %}">Carrito</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+
     <!-- SECCIÓN DESTACADOS -->
     <section class="container my-5">
         <h2 class="text-center mb-4">Productos Destacados</h2>
@@ -37,7 +38,7 @@
             <!-- Producto 1 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="/frontend/img/Herramientas/taladro.png" class="card-img-top" alt="Taladro eléctrico">
+                    <img src="{% static 'img/Herramientas/taladro.png' %}" class="card-img-top" alt="Taladro eléctrico">
                     <div class="card-body text-center">
                         <h5 class="card-title">Taladro Eléctrico</h5>
                         <p class="card-text">Potente taladro para trabajos de construcción y bricolaje.</p>
@@ -48,7 +49,7 @@
             <!-- Producto 2 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="/frontend/img/Herramientas/martilloacero.png" class="card-img-top" alt="Martillo de acero">
+                    <img src="{% static 'img/Herramientas/martilloacero.png' %}" class="card-img-top" alt="Martillo de acero">
                     <div class="card-body text-center">
                         <h5 class="card-title">Martillo de Acero</h5>
                         <p class="card-text">Resistente y ergonómico, ideal para uso profesional y doméstico.</p>
@@ -59,11 +60,10 @@
             <!-- Producto 3 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="/frontend/img/Herramientas/setdestornilladores.png" class="card-img-top" alt="Juego de destornilladores">
+                    <img src="{% static 'img/Herramientas/setdestornilladores.png' %}" class="card-img-top" alt="Juego de destornilladores">
                     <div class="card-body text-center">
                         <h5 class="card-title">Set de Destornilladores</h5>
-                        <p class="card-text">Set completo con múltiples puntas, ideal para todo tipo de reparaciones.
-                        </p>
+                        <p class="card-text">Set completo con múltiples puntas, ideal para todo tipo de reparaciones.</p>
                         <a href="/frontend/indexs/detalle.html?id=3" class="btn btn-primary btn-sm">Ver Más</a>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
             <!-- Producto 4 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="/frontend/img/Herramientas/pinturainterior.png" class="card-img-top" alt="Pintura">
+                    <img src="{% static 'img/Herramientas/pinturainterior.png' %}" class="card-img-top" alt="Pintura">
                     <div class="card-body text-center">
                         <h5 class="card-title">Pintura Interior</h5>
                         <p class="card-text">Amplia gama de colores duraderos y de fácil aplicación.</p>
@@ -81,9 +81,9 @@
             </div>
         </div>
     </section>
-    
-     <!-- SECCIÓN DESTACADOS -->
-     <section class="py-5 bg-white text-center">
+
+    <!-- SECCIÓN POR QUÉ ELEGIRNOS -->
+    <section class="py-5 bg-white text-center">
         <div class="container">
             <h2 class="mb-4">¿Por qué elegirnos?</h2>
             <div class="row">
@@ -105,6 +105,7 @@
             </div>
         </div>
     </section>
+
     <!-- FOOTER -->
     <footer class="footer bg-dark text-light py-4">
         <div class="container">
@@ -118,8 +119,7 @@
                 </div>
                 <div class="col-md-4">
                     <h5>Sobre nosotros</h5>
-                    <p>Ferretería con más de 20 años ofreciendo herramientas de calidad para el hogar y la industria.
-                    </p>
+                    <p>Ferretería con más de 20 años ofreciendo herramientas de calidad para el hogar y la industria.</p>
                 </div>
                 <div class="col-md-4">
                     <h5>Síguenos</h5>
@@ -130,9 +130,9 @@
             </div>
         </div>
     </footer>
+
     <!-- JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

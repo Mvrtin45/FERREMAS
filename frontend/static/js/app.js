@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tabla = document.getElementById("tablaPedidos");
-  const API_URL = 'http://localhost:8000/api/pedidos/';
+  const API_URL = 'http://http://127.0.0.1/:8000/api/pedidos/';
 
   // Función para cargar pedidos desde el backend
   async function cargarPedidos() {
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${pedido.id}</td>
-        <td>Cliente X</td> <!-- Aquí puedes poner campo cliente si agregas -->
+        <td>Cliente X</td> <!-- Ajusta para mostrar cliente real si tienes -->
         <td>${productos}</td>
         <td>${pedido.estado}</td>
         <td>${accionesHTML}</td>

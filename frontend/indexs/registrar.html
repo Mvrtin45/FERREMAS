@@ -1,41 +1,60 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registrarse - FerreMas</title>
-    <link rel="icon" type="image/png" href="/frontend/img/logo.jpg">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/frontend/css/login.css">
-    
+    <link rel="icon" type="image/png" href="{% static 'img/logo.jpg' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
 </head>
+
 <body>
-   
-    <div class="formulario">
+    <form class="formulario" method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
         <h1>Registrarse</h1>
+
         <div class="mb-3">
-            <label>Nombre:</label>
-            <input id="username" type="text" placeholder="Ingrese su nombre" required>
+            <label for="username">Nombre:</label>
+            <input id="username" name="username" type="text" placeholder="Ingrese su nombre" required
+                class="form-control" />
         </div>
+
         <div class="mb-3">
-            <label>Correo Electrónico:</label>
-            <input id="email" type="email" placeholder="Ingrese su correo" required>
+            <label for="email">Correo Electrónico:</label>
+            <input id="email" name="email" type="email" placeholder="Ingrese su correo" required class="form-control" />
         </div>
+
         <div class="mb-3">
-            <label>Contraseña:</label>
-            <input id="password" type="password" placeholder="Ingrese su contraseña" required>
+            <label for="password">Contraseña:</label>
+            <input id="password" name="password" type="password" placeholder="Ingrese su contraseña" required
+                class="form-control" />
         </div>
+
         <div class="mb-3">
-            <label>Confirmar Contraseña:</label>
-            <input id="confirmPassword" type="password" placeholder="Confirme su contraseña" required>
+            <label for="confirmPassword">Confirmar Contraseña:</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirme su contraseña"
+                required class="form-control" />
         </div>
-        <input id="registerButton" type="button" value="Registrarse">
-        <div class="registrarse">
-            <p>¿Ya tienes una cuenta? <a href="/frontend/indexs/login.html">Inicia sesión aquí</a></p>
+
+        <button type="submit" class="btn btn-primary">Registrarse</button>
+
+        {% if error %}
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+        {% endif %}
+
+        <div class="registrarse mt-3">
+            <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
         </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script type="module" src="/frontend/js/registrar.js"></script>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
