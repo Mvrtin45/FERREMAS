@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -24,7 +26,15 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'productos' %}">Productos</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'contacto' %}">Contacto</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'login' %}">Iniciar Sesión</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar Sesión</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{% url 'login' %}">Iniciar Sesión</a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'carrito' %}">Carrito</a></li>
                 </ul>
             </div>
@@ -42,29 +52,36 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Taladro Eléctrico</h5>
                         <p class="card-text">Potente taladro para trabajos de construcción y bricolaje.</p>
-                        <a href="/frontend/indexs/detalle.html?id=1" class="btn btn-primary btn-sm">Ver Más</a>
+                        <a href="{% url 'detalle' %}?id=E01" class="btn btn-primary btn-sm">Ver Más</a>
+                        <button class="btn btn-primary btn-agregar" data-id="E01">Agregar al carrito</button>
+
                     </div>
                 </div>
             </div>
             <!-- Producto 2 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/martilloacero.png' %}" class="card-img-top" alt="Martillo de acero">
+                    <img src="{% static 'img/Herramientas/martilloacero.png' %}" class="card-img-top"
+                        alt="Martillo de acero">
                     <div class="card-body text-center">
                         <h5 class="card-title">Martillo de Acero</h5>
                         <p class="card-text">Resistente y ergonómico, ideal para uso profesional y doméstico.</p>
-                        <a href="/frontend/indexs/detalle.html?id=2" class="btn btn-primary btn-sm">Ver Más</a>
+                        <a href="{% url 'detalle' %}?id=M01" class="btn btn-primary btn-sm">Ver Más</a>
+                        <button class="agregar-carrito btn btn-primary" data-id="{{ herramienta.id }}">Agregar al carrito</button>
                     </div>
                 </div>
             </div>
             <!-- Producto 3 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/setdestornilladores.png' %}" class="card-img-top" alt="Juego de destornilladores">
+                    <img src="{% static 'img/Herramientas/setdestornilladores.png' %}" class="card-img-top"
+                        alt="Juego de destornilladores">
                     <div class="card-body text-center">
                         <h5 class="card-title">Set de Destornilladores</h5>
-                        <p class="card-text">Set completo con múltiples puntas, ideal para todo tipo de reparaciones.</p>
-                        <a href="/frontend/indexs/detalle.html?id=3" class="btn btn-primary btn-sm">Ver Más</a>
+                        <p class="card-text">Set completo con múltiples puntas, ideal para todo tipo de reparaciones.
+                        </p>
+                        <a href="{% url 'detalle' %}?id=M02" class="btn btn-primary btn-sm">Ver Más</a>
+                        <button class="agregar-carrito btn btn-primary" data-id="{{ herramienta.id }}">Agregar al carrito</button>
                     </div>
                 </div>
             </div>
@@ -75,7 +92,8 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Pintura Interior</h5>
                         <p class="card-text">Amplia gama de colores duraderos y de fácil aplicación.</p>
-                        <a href="/frontend/indexs/detalle.html?id=11" class="btn btn-primary btn-sm">Ver Más</a>
+                        <a href="{% url 'detalle' %}?id=P01" class="btn btn-primary btn-sm">Ver Más</a>
+                        <button class="agregar-carrito btn btn-primary" data-id="{{ herramienta.id }}">Agregar al carrito</button>
                     </div>
                 </div>
             </div>
@@ -119,7 +137,8 @@
                 </div>
                 <div class="col-md-4">
                     <h5>Sobre nosotros</h5>
-                    <p>Ferretería con más de 20 años ofreciendo herramientas de calidad para el hogar y la industria.</p>
+                    <p>Ferretería con más de 20 años ofreciendo herramientas de calidad para el hogar y la industria.
+                    </p>
                 </div>
                 <div class="col-md-4">
                     <h5>Síguenos</h5>
@@ -134,5 +153,32 @@
     <!-- JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/carrito.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+ <script>
+  $(document).ready(function () {
+    $('.btn-agregar').click(function () {
+      const productoId = $(this).data('id');
+      $.ajax({
+        url: "{% url 'agregar_carrito' %}",
+        method: 'POST',
+        data: {
+          'producto_id': productoId,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function (response) {
+          alert(response.mensaje);
+        },
+        error: function () {
+          alert('Error al agregar al carrito');
+        }
+      });
+    });
+  });
+</script>
+<script src="{% static 'js/carrito.js' %}"></script>
+
 </body>
+
 </html>

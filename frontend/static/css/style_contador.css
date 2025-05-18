@@ -30,7 +30,7 @@
 body {
     justify-content: center;
     align-items: center;
-    background-image: url('/frontend/img/fondo.png');
+    background-image: url('../img/fondo.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

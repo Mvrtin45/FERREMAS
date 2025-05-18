@@ -28,7 +28,6 @@
             <input id="contraseña" type="password" name="password" placeholder="Ingrese su contraseña" required
                 class="form-control">
         </div>
-        <a href="/frontend/indexs/olvide-contrasena.html">¿Olvidó su Contraseña?</a>
         <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
 
         {% if error %}
@@ -39,7 +38,7 @@
             <p>¿No tienes cuenta? <a href="{% url 'register' %}">Registrate aquí</a></p>
         </div>
         <div class="registrarse">
-            <p>Cuenta de Administrador <a href="/frontend/indexs/Adminlogin.html">Administrador</a></p>
+            <p>Cuenta de Administrador <a href="{% url 'login_admin' %}">Administrador</a></p>
         </div>
     </form>
 
@@ -49,3 +48,72 @@
 </body>
 
 </html>
+
+
+def cart(request):
+    if request.user.is_authenticated:
+        user = request.user
+        order = Order.objects.filter(user=user, complete=False).order_by('-date_ordered').first()
+        if not order:
+            order = Order.objects.create(user=user, complete=False)
+
+        order.orderitem_set.filter(productoisnull=True).delete()
+
+        items = order.orderitem_set.filter(productoisnull=False)
+
+        items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {"get_cart_total": 0, "get_cart_items": 0, "shipping": False}
+        cartItems = order["get_cart_items"]
+
+    context = {"items": items, "order": order, "cartItems": cartItems}
+    return render(request, "cart.html", context)
+
+def checkout(request):
+    if request.user.is_authenticated:
+        user = request.user
+        order = Order.objects.filter(user=user, complete=False).order_by('-date_ordered').first()
+        if not order:
+            order = Order.objects.create(user=user, complete=False)
+        items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {"get_cart_total": 0, "get_cart_items": 0, "shipping": False}
+        cartItems = order["get_cart_items"]
+
+    context = {"items": items, "order": order, "cartItems": cartItems}
+    return render(request, "checkout.html", context)
+
+
+@csrf_exempt
+def updateItem(request):
+    data = json.loads(request.body)
+    productoId = data.get("productoId")
+    action = data.get("action")
+
+    print("Action:", action)
+    print("productoId:", productoId)
+
+    user = request.user
+    producto = Producto.objects.get(id=productoId)
+    order = Order.objects.filter(user=user, complete=False).order_by('-date_ordered').first()
+    if not order:
+        order = Order.objects.create(user=user, complete=False)
+
+    orderItem, created = OrderItem.objects.get_or_create(order=order, producto=producto)
+
+    if action == "add":
+        orderItem.quantity = orderItem.quantity + 1
+    elif action == "remove":
+        if orderItem.quantity > 1:
+            orderItem.quantity = orderItem.quantity - 1
+    elif action == "delete":
+        orderItem.delete()
+
+    if action != "delete":
+        orderItem.save()
+
+    return JsonResponse("Item was added", safe=False)

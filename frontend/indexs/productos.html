@@ -26,7 +26,15 @@
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'index' %}">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'productos' %}">Productos</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'contacto' %}">Contacto</a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'login' %}">Iniciar Sesión</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar Sesión</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{% url 'login' %}">Iniciar Sesión</a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'carrito' %}">Carrito</a></li>
                 </ul>
             </div>
@@ -45,7 +53,7 @@
                         <h6 class="card-title">Taladro Eléctrico</h6>
                         <p class="card-text">Potente taladro para trabajos de construcción.</p>
                         <p class="card-text">$25.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=1" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=E01" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="1" data-nombre="Taladro Eléctrico"
                             data-precio="25990" data-imagen="{% static 'img/Herramientas/taladro.png' %}">
                             Agregar al carrito
@@ -62,7 +70,7 @@
                         <h6 class="card-title">Martillo de Acero</h6>
                         <p class="card-text">Resistente y ergonómico.</p>
                         <p class="card-text">$11.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=2" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=M01" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="2" data-nombre="Martillo de Acero"
                             data-precio="11990" data-imagen="{% static 'img/Herramientas/martilloacero.png' %}">
                             Agregar al carrito
@@ -80,7 +88,7 @@
                         <h6 class="card-title">Juego de Destornilladores</h6>
                         <p class="card-text">Set completo para todo tipo de reparaciones.</p>
                         <p class="card-text">$9.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=3" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=M02" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="3"
                             data-nombre="Juego de Destornilladores" data-precio="9990"
                             data-imagen="{% static 'img/Herramientas/setdestornilladores.png' %}">
@@ -99,7 +107,7 @@
                         <h6 class="card-title">Sierra Circular Eléctrica</h6>
                         <p class="card-text">Cortes precisos en madera y metal.</p>
                         <p class="card-text">$35.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=4" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=E02" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="4"
                             data-nombre="Sierra Circular Eléctrica" data-precio="35990"
                             data-imagen="{% static 'img/Herramientas/sierraelectrica.png' %}">
@@ -117,7 +125,7 @@
                         <h6 class="card-title">Llave Inglesa</h6>
                         <p class="card-text">Ajustable para tuercas y pernos.</p>
                         <p class="card-text">$8.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=5" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=M03" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="5" data-nombre="Llave Inglesa"
                             data-precio="8990" data-imagen="{% static 'img/Herramientas/llaveinglesa.png' %}">
                             Agregar al carrito
@@ -134,7 +142,7 @@
                         <h6 class="card-title">Cinta Métrica</h6>
                         <p class="card-text">Mediciones exactas para tus proyectos.</p>
                         <p class="card-text">$5.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=6" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=M04" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="6" data-nombre="Cinta Métrica"
                             data-precio="5990" data-imagen="{% static 'img/Herramientas/cintametrica.png' %}">
                             Agregar al carrito
@@ -151,7 +159,7 @@
                         <h6 class="card-title">Taladro Percutor</h6>
                         <p class="card-text">Ideal para concreto y ladrillo.</p>
                         <p class="card-text">$29.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=7" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=E03" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="7"
                             data-nombre="Taladro Percutor" data-precio="29990"
                             data-imagen="{% static 'img/Herramientas/taladropercutor.png' %}">
@@ -169,7 +177,7 @@
                         <h6 class="card-title">Caja de Herramientas</h6>
                         <p class="card-text">Organización para todas tus herramientas.</p>
                         <p class="card-text">$19.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=8" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=M05" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="8"
                             data-nombre="Caja de Herramientas" data-precio="19990"
                             data-imagen="{% static 'img/Herramientas/cajaherramientas.png' %}">
@@ -187,7 +195,7 @@
                         <h6 class="card-title">Esmeril Angular</h6>
                         <p class="card-text">Pulidos y cortes precisos.</p>
                         <p class="card-text">$39.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=9" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=E04" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="9" data-nombre="Esmeril Angular"
                             data-precio="39990" data-imagen="{% static 'img/Herramientas/esmerilangular.png' %}">
                             Agregar al carrito
@@ -204,7 +212,7 @@
                         <h6 class="card-title">Pintura Exterior</h6>
                         <p class="card-text">Colores duraderos para exteriores.</p>
                         <p class="card-text">$22.990</p>
-                        <a href="/frontend/indexs/detalle.html?id=10" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{% url 'detalle' %}?id=P01" class="btn btn-primary btn-sm">Ver Detalles</a>
                         <button class="btn btn-success btn-sm agregar-carrito" data-id="10"
                             data-nombre="Pintura Exterior" data-precio="22990"
                             data-imagen="{% static 'img/Herramientas/pinturaexterior.png' %}">

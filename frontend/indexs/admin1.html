@@ -3,45 +3,15 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Vendedor - FerreMas</title>
-    <link rel="icon" type="image/png" href="{% static 'img/logo.jpg' %}">
-    <link rel="stylesheet" href="{% static 'css/style_vendedor.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'img/logo.jpg' %}" />
+    <link rel="stylesheet" href="{% static 'css/style_vendedor.css' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Ferremas</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#productos">Productos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#pedidos">Pedidos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#pagos">Pagos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#ordenes">Órdenes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-danger" href="/frontend/indexs/login.html">Cerrar sesión</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <!-- DASHBOARD -->
     <main class="container my-5">
         <div class="row">
@@ -61,11 +31,23 @@
                         <th>Nombre</th>
                         <th>Stock</th>
                         <th>Precio</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Aquí se cargarán dinámicamente los productos -->
+                    {% if herramientas %}
+                    {% for herramienta in herramientas %}
+                    <tr>
+                        <td>{{ herramienta.id }}</td>
+                        <td>{{ herramienta.nombre_herramienta }}</td>
+                        <td>{{ herramienta.stock }}</td>
+                        <td>${{ herramienta.precio }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">No hay productos cargados.</td>
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
         </section>
@@ -77,18 +59,46 @@
                 <thead>
                     <tr>
                         <th>ID Pedido</th>
-                        <th>Cliente</th>
+                        <th>Fecha</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Aquí se cargarán dinámicamente los pedidos -->
+                    {% if pedidos %}
+                        {% for pedido in pedidos %}
+                            <tr>
+                                <td>{{ pedido.id }}</td>
+                                <td>{{ pedido.fecha_pedido|date:"d/m/Y H:i" }}</td>
+                                <td>{{ pedido.estado|default:"pendiente" }}</td>
+                                <td>
+                                    <!-- Form para cambiar estado -->
+                                    <form method="post" action="{% url 'actualizar_estado_pedido' pedido.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <select name="estado" class="form-select d-inline w-auto" required>
+                                            <option value="pendiente" {% if pedido.estado == "pendiente" %}selected{% endif %}>Pendiente</option>
+                                            <option value="procesado" {% if pedido.estado == "procesado" %}selected{% endif %}>Procesado</option>
+                                            <option value="pagado" {% if pedido.estado == "pagado" %}selected{% endif %}>Pagado</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+                                    </form>
+
+                                    <!-- Botón para confirmar pago -->
+                                    <form method="post" action="{% url 'confirmar_pago' pedido.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success" {% if pedido.estado == "pagado" %}disabled{% endif %}>Confirmar Pago</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="4" class="text-center">No hay pedidos disponibles.</td></tr>
+                    {% endif %}
                 </tbody>
             </table>
         </section>
 
-        <!-- SECCIÓN DE PAGOS -->
+        <!-- SECCIÓN DE PAGOS (Opcional: si quieres mostrar pagos separados) -->
         <section id="pagos" class="mb-5">
             <h2>Pagos y Facturación</h2>
             <div class="d-flex justify-content-between">
@@ -107,15 +117,9 @@
         </section>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="footer bg-dark text-light py-4">
-        <div class="container text-center">
-            <p>&copy; 2025 Ferremas. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/vendedor.js' %}"></script>
 </body>
+
 </html>

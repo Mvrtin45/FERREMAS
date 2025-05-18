@@ -1,0 +1,124 @@
+[
+  {
+    "model": "FerreMas.Categoria",
+    "pk": 1,
+    "fields": {
+      "nombre_categoria": "Herramientas Manuales"
+    }
+  },
+    {
+    "model": "FerreMas.Categoria",
+    "pk": 2,
+    "fields": {
+      "nombre_categoria": "Herramientas Electricas"
+      
+    }
+  },
+    {
+    "model": "FerreMas.Categoria",
+    "pk": 3,
+    "fields": {
+      "nombre_categoria": "Pintura"
+    }
+  },
+
+
+
+
+
+
+
+
+  {
+    "model": "FerreMas.Herramienta",
+    "pk": "E01",
+    "fields": {
+      "nombre_herramienta": "Taladro Electrico",
+      "categoria": 2,
+      "precio": "25990"
+    }
+  },
+  {
+    "model": "FerreMas.herramienta",
+    "pk": "M01",
+    "fields": {
+      "nombre_herramienta": "Martillo de Acero",
+      "categoria": 1,
+      "precio": "11990"
+    }
+  },
+   {
+    "model": "FerreMas.herramienta",
+    "pk": "M02",
+    "fields": {
+      "nombre_herramienta": "Juego de Destornilladores",
+      "categoria": 1,
+      "precio": "9990"
+    }
+  },
+   {
+    "model": "FerreMas.herramienta",
+    "pk": "E02",
+    "fields": {
+      "nombre_herramienta": "Sierra Circular Electrica",
+      "categoria": 2,
+      "precio": "35990"
+    }
+  },
+   {
+    "model": "FerreMas.herramienta",
+    "pk": "M03",
+    "fields": {
+      "nombre_herramienta": "Llave inglesa",
+      "categoria": 1,
+      "precio": "8990"
+    }
+  },
+   {
+    "model": "FerreMas.herramienta",
+    "pk": "M04",
+    "fields": {
+      "nombre_herramienta": "Cinta Metrica",
+      "categoria": 1,
+      "precio": "5990"
+    }
+  },
+   {
+    "model": "FerreMas.herramienta",
+    "pk": "E03",
+    "fields": {
+      "nombre_herramienta": "Taladro Percutar",
+      "categoria": 2,
+      "precio": "29990"
+    }
+  },
+  {
+    "model": "FerreMas.herramienta",
+    "pk": "M05",
+    "fields": {
+      "nombre_herramienta": "Caja de herramientas",
+      "categoria": 1,
+      "precio": "19990"
+    }
+  },
+  {
+    "model": "FerreMas.herramienta",
+    "pk": "E04",
+    "fields": {
+      "nombre_herramienta": "Esmeril Angular",
+      "categoria": 2,
+      "precio": "39990"
+    }
+  },
+  {
+    "model": "FerreMas.herramienta",
+    "pk": "P01",
+    "fields": {
+      "nombre_herramienta": "Pintura Exterior",
+      "categoria": 3,
+      "precio": "22990"
+    }
+  }
+]
+
+
