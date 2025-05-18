@@ -90,21 +90,24 @@
                                     </form>
                                 </td>
                             </tr>
+                            <!-- Subtabla con detalles del pedido -->
+                            <tr>
+                                <td colspan="4">
+                                    <strong>Cliente:</strong> {{ pedido.cliente.nombre }} {{ pedido.cliente.apellido }}<br>
+                                    <strong>Herramientas solicitadas:</strong>
+                                    <ul>
+                                        {% for detalle in pedido.detalles.all %}
+                                            <li>{{ detalle.herramienta.nombre_herramienta }} (Cantidad: {{ detalle.cantidad }})</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
                         {% endfor %}
                     {% else %}
                         <tr><td colspan="4" class="text-center">No hay pedidos disponibles.</td></tr>
                     {% endif %}
                 </tbody>
             </table>
-        </section>
-
-        <!-- SECCIÓN DE PAGOS (Opcional: si quieres mostrar pagos separados) -->
-        <section id="pagos" class="mb-5">
-            <h2>Pagos y Facturación</h2>
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-success">Ver Pagos</button>
-                <button class="btn btn-primary">Generar Factura</button>
-            </div>
         </section>
 
         <!-- SECCIÓN DE ÓRDENES -->

@@ -16,11 +16,17 @@ class Herramienta(models.Model):
     stock = models.PositiveIntegerField(default=0)
     imagen_herramienta = models.ImageField(upload_to='images/', blank=True, null=True)
 
+class Cliente(models.Model):
+    rut = models.CharField(max_length=9, primary_key=True, unique=True)
+    nombre = models.CharField(max_length=50)
+    apellido = models.CharField(max_length=50)
+    telefono = models.CharField(max_length=15)
+    direccion = models.CharField(max_length=255)
 
 class Pedido(models.Model):
     id = models.CharField(max_length=20, primary_key=True, unique=True)
+    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE)
     fecha_pedido = models.DateTimeField(auto_now_add=True)
-    cliente = models.CharField(max_length=100, blank=True, null=True)  # Puedes adaptar a FK si tienes modelo cliente
     estado = models.CharField(
         max_length=20,
         choices=[
@@ -44,14 +50,7 @@ class Pago(models.Model):
     fecha_pago = models.DateTimeField(auto_now_add=True)
     confirmado = models.BooleanField(default=False)
 
-class Cliente(models.Model):
-    rut = models.CharField(max_length=9, primary_key=True, unique=True)
-    nombre = models.CharField(max_length=50)
-    apellido = models.CharField(max_length=50)
-    telefono = models.CharField(max_length=15)
-    direccion = models.CharField(max_length=255)
-    
-    
+
 class Administrador(models.Model):
     TIPO_CHOICES = [
         ('vendedor', 'Vendedor'),
