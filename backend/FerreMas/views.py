@@ -1,8 +1,9 @@
 import json 
+import requests
 from django.shortcuts import render,  redirect, get_object_or_404
 from .serializers import UserSerializer, PedidoSerializer, HerramientaSerializer, CategoriaSerializer
 from django.contrib.auth.models import User
-from .models import Pedido, Herramienta, Categoria, Administrador, Pago, DetallePedido
+from .models import Pedido, Herramienta, Categoria, Administrador, Pago, DetallePedido, OrdenDespacho
 from rest_framework import viewsets
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
@@ -10,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.db import models
 from django.contrib import messages
+from transbank.webpay.oneclick.mall_inscription import MallInscription
 
 
 # Create your views here.
@@ -50,10 +52,12 @@ ESTADOS_PEDIDO = [
 def admin1_view(request):
     pedidos = Pedido.objects.all().order_by('-fecha_pedido')
     Herramientas = Herramienta.objects.all()
+    ordenes = OrdenDespacho.objects.all().select_related('pedido', 'pedido__cliente')
     context = {
         'pedidos': pedidos,
         'estados': ESTADOS_PEDIDO,
-        'herramientas': Herramientas   
+        'ordenes': ordenes,
+        'herramientas': Herramientas,   
     }
     return render(request, 'admin1.html', context)
 
@@ -81,6 +85,17 @@ def confirmar_pago(request, pedido_id):
     return redirect('admin1')
 
 @require_POST
+def crear_orden_despacho(request):
+    pedido_id = request.POST.get('pedido_id')
+    pedido = get_object_or_404(Pedido, id=pedido_id)
+
+    # Crear orden solo si no existe aún
+    if not hasattr(pedido, 'ordendespacho'):
+        OrdenDespacho.objects.create(pedido=pedido)
+
+    return redirect('admin1')
+
+@require_POST
 def editar_herramienta_inline(request, herramienta_id):
     herramienta = get_object_or_404(Herramienta, id=herramienta_id)
     herramienta.nombre_herramienta = request.POST.get('nombre')
@@ -99,34 +114,85 @@ def eliminar_herramienta_inline(request, herramienta_id):
 
 #VISTA PARA ADMIN 3
 def admin3_view(request):
-    return render(request, 'admin3.html')
+    pagos = Pago.objects.all()
+    entregas_realizadas = OrdenDespacho.objects.filter(estado='entregado')
+    entregas_pendientes = OrdenDespacho.objects.exclude(estado='entregado')
+
+    return render(request, 'admin3.html', {
+        'pagos': pagos,
+        'entregas_realizadas': entregas_realizadas,
+        'entregas_pendientes': entregas_pendientes,
+    })
+
+def confirmar_pago_admin3(request, pago_id):
+    pago = get_object_or_404(Pago, id=pago_id)
+    
+    if request.method == 'POST':
+        pago.confirmado = True
+        pago.save()
+        
+        pedido = pago.pedido
+        pedido.estado = 'pagado'
+        pedido.save()
+
+    return redirect('admin3')
+
+def registrar_entrega(request, pedido_id):
+    if request.method == 'POST':
+        orden = get_object_or_404(OrdenDespacho, pedido__id=pedido_id)
+        orden.estado = 'entregado'
+        orden.save()
+    return redirect('admin3')
 
 def admin2_view(request):
-    return render(request, 'admin2.html')
+    ordenes = OrdenDespacho.objects.select_related('pedido', 'pedido__cliente')
+    context = {'ordenes': ordenes}
+    return render(request, 'admin2.html', context)
 
+#VISTA PARA ORDENES DE DESPACHO
+def obtener_ordenes_despacho(request):
+    ordenes = OrdenDespacho.objects.select_related('pedido__cliente').prefetch_related('pedido__detalles__herramienta')
+
+    data = []
+    for orden in ordenes:
+        detalles = [
+            {
+                'nombre': detalle.herramienta.nombre_herramienta,
+                'cantidad': detalle.cantidad
+            }
+            for detalle in orden.pedido.detalles.all()
+        ]
+        data.append({
+            'id': orden.id,
+            'estado': orden.estado,
+            'cliente': f"{orden.pedido.cliente.nombre} {orden.pedido.cliente.apellido}",
+            'productos': detalles
+        })
+
+    return JsonResponse({'ordenes': data})
+
+#VISTA PARA ACTUALIZAR ESTADO DE ORDEN
+@csrf_exempt
+@require_POST
+def actualizar_estado_orden(request):
+    try:
+        data = json.loads(request.body)
+        orden_id = data.get('id')
+        nuevo_estado = data.get('estado')
+
+        orden = OrdenDespacho.objects.get(id=orden_id)
+        orden.estado = nuevo_estado
+        orden.save()
+
+        return JsonResponse({'success': True, 'mensaje': 'Estado actualizado correctamente'})
+    except OrdenDespacho.DoesNotExist:
+        return JsonResponse({'success': False, 'mensaje': 'Orden no encontrada'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'mensaje': str(e)}, status=500)
+    
 #VISTA PARA VER DETALLE DE LOS PRODUCTOS
 def detalle_view(request):
     return render(request, 'detalle.html')
-
-#VISTA PARA VER EL CARRITO
-def carrito_view(request):
-    carrito = request.session.get('carrito', {})
-    productos_en_carrito = []
-
-    for producto_id, cantidad in carrito.items():
-        herramienta = get_object_or_404(Herramienta, id=producto_id)
-        productos_en_carrito.append({
-            'producto': herramienta,
-            'cantidad': cantidad,
-            'subtotal': herramienta.precio * cantidad
-        })
-
-    total = sum(item['subtotal'] for item in productos_en_carrito)
-
-    return render(request, 'carrito.html', {
-        'productos_en_carrito': productos_en_carrito,
-        'total': total
-    })
 
 #vista para ver los productos
 def productos_view(request):
@@ -294,21 +360,71 @@ def herramienta_detalle(request, pk):  # cambia id por pk para claridad
     except Herramienta.DoesNotExist:
         return JsonResponse({'error': 'Herramienta no encontrada'}, status=404)
 
-@csrf_exempt  
+
+def carrito_view(request):
+    carrito = request.session.get('carrito', {})
+    herramientas = []
+    total = 0
+
+    for producto_id, cantidad in carrito.items():
+        try:
+
+            herramienta = Herramienta.objects.get(pk=producto_id)
+            herramienta.cantidad = cantidad
+            herramienta.subtotal = herramienta.precio * cantidad
+            herramientas.append(herramienta)
+            total += herramienta.subtotal
+        except Herramienta.DoesNotExist:
+            continue
+
+    return render(request, 'carrito.html', {
+    'productos_en_carrito': herramientas,  # <- nombre que espera tu HTML
+    'total': total
+    })
+
+@csrf_exempt
+@require_POST
 def agregar_al_carrito(request):
+    try:
+        data = json.loads(request.body)
+        producto_id = data.get('producto_id')
+
+        if not producto_id:
+            return JsonResponse({'error': 'ID de producto no proporcionado'}, status=400)
+
+        carrito = request.session.get('carrito', {})
+        carrito[producto_id] = carrito.get(producto_id, 0) + 1
+        request.session['carrito'] = carrito
+        return JsonResponse({'mensaje': 'Producto agregado al carrito'})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+def actualizar_carrito(request):
     if request.method == 'POST':
-        producto_id = request.POST.get('producto_id')
+        producto_id = str(request.POST.get('producto_id'))
+        cantidad = int(request.POST.get('cantidad', 1))
+
         carrito = request.session.get('carrito', {})
 
-        if producto_id in carrito:
-            carrito[producto_id] += 1
+        if cantidad > 0:
+            carrito[producto_id] = cantidad
         else:
-            carrito[producto_id] = 1
+            carrito.pop(producto_id, None)
 
         request.session['carrito'] = carrito
+        return redirect('carrito')
 
-        return JsonResponse({'mensaje': 'Producto agregado al carrito'})
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
+@require_POST
+def eliminar_del_carrito(request):
+    producto_id = str(request.POST.get('producto_id'))
 
+    carrito = request.session.get('carrito', {})
+    if producto_id in carrito:
+        del carrito[producto_id]
 
+    request.session['carrito'] = carrito
+    return redirect('carrito')
 
+def redireccionar_view(request):
+    return render(request, 'redireccionar.html')

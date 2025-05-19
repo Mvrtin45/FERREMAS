@@ -21,9 +21,9 @@ class DetallePedidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = DetallePedido
         fields = ['id', 'herramienta', 'herramienta_nombre', 'cantidad', 'precio', 'total']
+
 class PedidoSerializer(serializers.ModelSerializer):
     detalles = DetallePedidoSerializer(many=True, read_only=True)
-
     class Meta:
         model = Pedido
         fields = ['id', 'fecha_pedido', 'detalles']
@@ -32,3 +32,9 @@ class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
         fields = '__all__'
+
+class HerramientaDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Herramienta
+        fields = ['id', 'nombre_herramienta', 'categoria', 'categoria_nombre', 'precio', 'stock', 'imagen_herramienta']
+

@@ -48,17 +48,34 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for pago in pagos %}
                         <tr>
-                            <td>001</td>
-                            <td>Juan Pérez</td>
-                            <td>$150.00</td>
-                            <td>Pendiente</td>
+                            <td>{{ pago.id }}</td>
+                            <td>{{ pago.pedido.cliente.nombre }} {{ pago.pedido.cliente.apellido }}</td>
+                            <td>${{ pago.monto }}</td>
                             <td>
-                                <button class="btn btn-success btn-sm">Confirmar</button>
-                                <button class="btn btn-danger btn-sm">Rechazar</button>
+                                {% if pago.confirmado %}
+                                Confirmado
+                                {% else %}
+                                Pendiente
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not pago.confirmado %}
+                                <form method="POST" action="{% url 'confirmar_pago' pago.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">Confirmar</button>
+                                </form>
+                                {% else %}
+                                <span class="text-success">✔</span>
+                                {% endif %}
                             </td>
                         </tr>
-                        <!-- Más filas aquí -->
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No hay pagos pendientes.</td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -67,19 +84,41 @@
         <!-- Sección de Registro de Entregas -->
         <section>
             <h3 class="text-light mb-3">Registrar Entregas</h3>
-            <form class="mb-4">
-                <div class="mb-3">
-                    <label for="entrega-id" class="form-label text-light">ID Pedido</label>
-                    <input type="text" id="entrega-id" name="entrega-id" class="form-control"
-                        placeholder="Ingrese el ID del pedido">
-                </div>
-                <div class="mb-3">
-                    <label for="entrega-cliente" class="form-label text-light">Cliente</label>
-                    <input type="text" id="entrega-cliente" name="entrega-cliente" class="form-control"
-                        placeholder="Nombre del cliente">
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Registrar Entrega</button>
-            </form>
+
+            <h4 class="text-light mb-3">Órdenes Pendientes de Entrega</h4>
+            <div class="table-responsive mb-5">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID Pedido</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for orden in entregas_pendientes %}
+                        <tr>
+                            <td>{{ orden.pedido.id }}</td>
+                            <td>{{ orden.pedido.cliente.nombre }} {{ orden.pedido.cliente.apellido }}</td>
+                            <td>{{ orden.fecha_creacion|date:"d/m/Y" }}</td>
+                            <td>{{ orden.estado|title }}</td>
+                            <td>
+                                <form method="POST" action="{% url 'registrar_entrega' orden.pedido.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-sm">Registrar Entrega</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No hay órdenes pendientes de entrega.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
             <h4 class="text-light mb-3">Historial de Entregas</h4>
             <div class="table-responsive">
@@ -93,13 +132,18 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for orden in entregas_realizadas %}
                         <tr>
-                            <td>12345</td>
-                            <td>María López</td>
-                            <td>01/05/2025</td>
-                            <td>Entregado</td>
+                            <td>{{ orden.pedido.id }}</td>
+                            <td>{{ orden.pedido.cliente.nombre }} {{ orden.pedido.cliente.apellido }}</td>
+                            <td>{{ orden.fecha_creacion|date:"d/m/Y" }}</td>
+                            <td>{{ orden.estado|title }}</td>
                         </tr>
-                        <!-- Más filas aquí -->
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No hay entregas registradas.</td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

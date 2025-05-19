@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categoria,Herramienta,Pedido,DetallePedido,Cliente,Administrador, Pago
+from .models import Categoria,Herramienta,Pedido,DetallePedido,Cliente,Administrador, Pago, OrdenDespacho
 
 # Register your models here.
 admin.site.register(Categoria)
@@ -9,3 +9,4 @@ admin.site.register(DetallePedido)
 admin.site.register(Cliente)
 admin.site.register(Administrador)
 admin.site.register(Pago)
+admin.site.register(OrdenDespacho)

@@ -15,14 +15,21 @@ function getCookie(name) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Selecciona todos los botones con clase "btn-agregar-carrito"
-    const botonesAgregar = document.querySelectorAll('.btn-agregar-carrito');
+    // Selecciona todos los botones con clase "agregar-carrito"
+    const botonesAgregar = document.querySelectorAll('.agregar-carrito');
 
     botonesAgregar.forEach(boton => {
         boton.addEventListener('click', () => {
-            const productoId = boton.getAttribute('data-producto-id');
+            const productoId = boton.getAttribute('data-id');
+
             if (!productoId) {
                 alert('Error: no se encontró el ID del producto');
+                return;
+            }
+
+            // Verifica si el usuario está autenticado (lo debes definir desde el template)
+            if (typeof window.userIsAuthenticated !== 'undefined' && !window.userIsAuthenticated) {
+                alert('Debes iniciar sesión para agregar productos al carrito.');
                 return;
             }
 
@@ -31,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'), // Si usas CSRF
+                    'X-CSRFToken': getCookie('csrftoken'),
                 },
                 body: JSON.stringify({ producto_id: productoId }),
             })
@@ -41,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(data => {
                 alert(data.mensaje || 'Producto agregado al carrito');
-                // Opcional: actualizar contador carrito o UI
+                // Aquí podrías actualizar el contador del carrito si tienes uno
             })
             .catch(error => {
                 console.error('Error:', error);

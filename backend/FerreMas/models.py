@@ -44,6 +44,23 @@ class DetallePedido(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2)
 
+
+class OrdenDespacho(models.Model):
+    pedido = models.OneToOneField(Pedido, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    estado = models.CharField(
+        max_length=20,
+        choices=[
+            ('pendiente', 'Pendiente'),
+            ('preparando', 'Preparando'),
+            ('entregado', 'Entregado'),
+        ],
+        default='pendiente'
+    )
+
+    def __str__(self):
+        return f"Orden {self.pedido.id} - {self.estado}"
+    
 class Pago(models.Model):
     pedido = models.OneToOneField(Pedido, on_delete=models.CASCADE)
     monto = models.DecimalField(max_digits=10, decimal_places=2)
@@ -66,5 +83,4 @@ class Administrador(models.Model):
 
     def __str__(self):
         return f"{self.nombre} ({self.tipo})"
-
 

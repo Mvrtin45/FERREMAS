@@ -74,6 +74,13 @@
     background-color: #0056b3;
 }
 
+.btn-container {
+    display: flex;
+    flex-direction: column; /* Apila los botones verticalmente */
+    gap: 10px; /* Espacio entre botones */
+    align-items: center; 
+}
+
 /* RESPUESTA RESPONSIVA */
 @media (max-width: 768px) {
     .card {
