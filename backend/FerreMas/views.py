@@ -3,7 +3,7 @@ import requests
 from django.shortcuts import render,  redirect, get_object_or_404
 from .serializers import UserSerializer, PedidoSerializer, HerramientaSerializer, CategoriaSerializer
 from django.contrib.auth.models import User
-from .models import Pedido, Herramienta, Categoria, Administrador, Pago, DetallePedido, OrdenDespacho
+from .models import Pedido, Herramienta, Categoria, Administrador, Pago, DetallePedido, OrdenDespacho, Cliente
 from rest_framework import viewsets
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
@@ -11,8 +11,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.db import models
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 import uuid
 from django.http import HttpResponseBadRequest
+from django.utils import timezone
 from transbank.webpay.webpay_plus.transaction import Transaction
 from transbank.common.options import WebpayOptions
 from transbank.common.integration_type import IntegrationType
@@ -29,7 +31,94 @@ options = WebpayOptions(
 
 tx = Transaction(options)
 
+@login_required
+def iniciar_pago(request):
+    if request.method == 'POST':
+        region = request.POST.get('region')
+        comuna = request.POST.get('comuna')
+        direccion = request.POST.get('direccion')
 
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        telefono = request.POST.get('telefono')
+
+        cliente = Cliente.objects.filter(user=request.user).first()
+        if not cliente:
+            messages.error(request, "Cliente no encontrado.")
+            return redirect('carrito')
+
+        # Actualizar datos del cliente
+        cliente.nombre = nombre
+        cliente.apellido = apellido
+        cliente.telefono = telefono
+        cliente.save()
+
+        pedido = Pedido.objects.filter(cliente=cliente, estado='pendiente').order_by('-fecha_pedido').first()
+        if not pedido:
+            messages.error(request, "No se encontró un pedido para pagar.")
+            return redirect('carrito')
+
+        # Actualizar datos de envío en pedido
+        pedido.region = region
+        pedido.comuna = comuna
+        pedido.direccion = direccion
+        pedido.save()
+
+        monto = float(request.POST.get('total'))
+        buy_order = str(uuid.uuid4())[:26]
+        session_id = str(uuid.uuid4())[:61]
+        return_url = request.build_absolute_uri('/pago/respuesta/')
+
+        response = tx.create(buy_order, session_id, monto, return_url)
+
+        Pago.objects.update_or_create(
+            pedido=pedido,
+            defaults={'monto': monto, 'confirmado': False}
+        )
+
+        return redirect(f"{response['url']}?token_ws={response['token']}")
+
+    return redirect('carrito')
+
+
+@csrf_exempt
+def respuesta(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "Debes iniciar sesión para ver el resultado del pago.")
+        return redirect('login')
+
+    token = request.GET.get('token_ws') or request.POST.get('token_ws')
+    if not token:
+        messages.error(request, "Token no recibido.")
+        return redirect('checkout')
+
+    response = tx.commit(token)
+
+    if response['status'] == 'AUTHORIZED':
+        cliente = Cliente.objects.filter(user=request.user).first()
+        pedido = Pedido.objects.filter(cliente=cliente, estado='pendiente').order_by('-fecha_pedido').first()
+
+        if not pedido:
+            return render(request, 'pago_error.html', {'response': response, 'error': 'No se encontró una orden válida.'})
+
+        pedido.estado = 'pagado'
+        pedido.fecha_pedido = timezone.now()
+        pedido.save()
+
+        pago = Pago.objects.get(pedido=pedido)
+        pago.confirmado = True
+        pago.save()
+
+        # Descontar stock (suponiendo que pedido tiene detalles relacionados)
+        for item in pedido.detalles.all():
+            herramienta = item.herramienta
+            herramienta.stock -= item.cantidad
+            herramienta.save()
+
+        return render(request, 'pago_exito.html', {'response': response})
+
+    else:
+        return render(request, 'pago_error.html', {'response': response})
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -376,6 +465,7 @@ def herramienta_detalle(request, pk):  # cambia id por pk para claridad
         return JsonResponse({'error': 'Herramienta no encontrada'}, status=404)
 
 
+@login_required
 def carrito_view(request):
     carrito = request.session.get('carrito', {})
     herramientas = []
@@ -383,7 +473,6 @@ def carrito_view(request):
 
     for producto_id, cantidad in carrito.items():
         try:
-
             herramienta = Herramienta.objects.get(pk=producto_id)
             herramienta.cantidad = cantidad
             herramienta.subtotal = herramienta.precio * cantidad
@@ -392,10 +481,14 @@ def carrito_view(request):
         except Herramienta.DoesNotExist:
             continue
 
+    cliente = Cliente.objects.filter(user=request.user).first()
+
     return render(request, 'carrito.html', {
-    'productos_en_carrito': herramientas,  # <- nombre que espera tu HTML
-    'total': total
+        'productos_en_carrito': herramientas,
+        'total': total,
+        'cliente': cliente,
     })
+
 
 @csrf_exempt
 @require_POST

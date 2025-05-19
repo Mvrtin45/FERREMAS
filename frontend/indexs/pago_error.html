@@ -1,0 +1,7 @@
+<h2>Error en el pago</h2>
+{% if error %}
+<p>{{ error }}</p>
+{% endif %}
+<p>Detalle de la respuesta:</p>
+<pre>{{ response }}</pre>
+<a href="/checkout/">Volver a checkout</a>

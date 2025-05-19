@@ -1,6 +1,7 @@
 from django.db import models
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 
 
@@ -17,16 +18,19 @@ class Herramienta(models.Model):
     imagen_herramienta = models.ImageField(upload_to='images/', blank=True, null=True)
 
 class Cliente(models.Model):
-    rut = models.CharField(max_length=9, primary_key=True, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    rut = models.CharField(max_length=9, unique=True)
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
     telefono = models.CharField(max_length=15)
     direccion = models.CharField(max_length=255)
 
 class Pedido(models.Model):
-    id = models.CharField(max_length=20, primary_key=True, unique=True)
     cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE)
     fecha_pedido = models.DateTimeField(auto_now_add=True)
+    direccion = models.CharField(max_length=255, blank=True, null=True)
+    comuna = models.CharField(max_length=100, blank=True, null=True)
+    region = models.CharField(max_length=100, blank=True, null=True)
     estado = models.CharField(
         max_length=20,
         choices=[
