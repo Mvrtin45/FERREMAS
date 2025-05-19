@@ -11,7 +11,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.db import models
 from django.contrib import messages
-from transbank.webpay.oneclick.mall_inscription import MallInscription
+import uuid
+from django.http import HttpResponseBadRequest
+from transbank.webpay.webpay_plus.transaction import Transaction
+from transbank.common.options import WebpayOptions
+from transbank.common.integration_type import IntegrationType
 
 
 # Create your views here.
