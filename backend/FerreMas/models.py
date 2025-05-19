@@ -24,6 +24,8 @@ class Cliente(models.Model):
     apellido = models.CharField(max_length=50)
     telefono = models.CharField(max_length=15)
     direccion = models.CharField(max_length=255)
+    region = models.CharField(max_length=100, blank=True, null=True)
+    comuna = models.CharField(max_length=100, blank=True, null=True)
 
 class Pedido(models.Model):
     cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE)

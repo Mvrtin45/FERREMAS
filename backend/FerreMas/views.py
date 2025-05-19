@@ -37,40 +37,41 @@ def iniciar_pago(request):
         region = request.POST.get('region')
         comuna = request.POST.get('comuna')
         direccion = request.POST.get('direccion')
-
-        nombre = request.POST.get('nombre')
-        apellido = request.POST.get('apellido')
         telefono = request.POST.get('telefono')
+        monto = float(request.POST.get('total'))
 
         cliente = Cliente.objects.filter(user=request.user).first()
         if not cliente:
             messages.error(request, "Cliente no encontrado.")
             return redirect('carrito')
 
-        # Actualizar datos del cliente
-        cliente.nombre = nombre
-        cliente.apellido = apellido
+        # Actualizar datos en el modelo Cliente
+        cliente.region = region
+        cliente.comuna = comuna
+        cliente.direccion = direccion
         cliente.telefono = telefono
         cliente.save()
 
+        # Buscar pedido pendiente
         pedido = Pedido.objects.filter(cliente=cliente, estado='pendiente').order_by('-fecha_pedido').first()
         if not pedido:
             messages.error(request, "No se encontró un pedido para pagar.")
             return redirect('carrito')
 
-        # Actualizar datos de envío en pedido
+        # Registrar datos en el pedido también
         pedido.region = region
         pedido.comuna = comuna
         pedido.direccion = direccion
+        pedido.fecha_pedido = timezone.now()
         pedido.save()
 
-        monto = float(request.POST.get('total'))
+        # Crear transacción con Transbank
         buy_order = str(uuid.uuid4())[:26]
         session_id = str(uuid.uuid4())[:61]
         return_url = request.build_absolute_uri('/pago/respuesta/')
-
         response = tx.create(buy_order, session_id, monto, return_url)
 
+        # Guardar pago preliminar
         Pago.objects.update_or_create(
             pedido=pedido,
             defaults={'monto': monto, 'confirmado': False}
@@ -78,7 +79,7 @@ def iniciar_pago(request):
 
         return redirect(f"{response['url']}?token_ws={response['token']}")
 
-    return redirect('carrito')
+    return redirect('pago_exitoso.html')
 
 
 @csrf_exempt
@@ -90,7 +91,7 @@ def respuesta(request):
     token = request.GET.get('token_ws') or request.POST.get('token_ws')
     if not token:
         messages.error(request, "Token no recibido.")
-        return redirect('checkout')
+        return redirect('carrito')
 
     response = tx.commit(token)
 
@@ -115,7 +116,7 @@ def respuesta(request):
             herramienta.stock -= item.cantidad
             herramienta.save()
 
-        return render(request, 'pago_exito.html', {'response': response})
+        return render(request, 'pago_exitoso.html', {'response': response})
 
     else:
         return render(request, 'pago_error.html', {'response': response})
@@ -144,6 +145,12 @@ class CategoriaViewSet(viewsets.ModelViewSet):
 # VISTA PARA VER LOS PEDIDOS.
 def pedidos_View(request):
     return render(request, 'admin2.html')
+
+def pago_exitoso(request):
+    return render(request, 'pago_exitoso.html')
+    
+def pago_error(request):
+    return render(request, 'pago_error.html')
 
 # Lista de estados válidos para pedidos
 ESTADOS_PEDIDO = [

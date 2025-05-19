@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import contacto_view,agregar_al_carrito, PedidoViewSet, HerramientaViewSet, carrito_view, CategoriaViewSet, pedidos_View, detalle_view,  productos_view, index_view, login_view, UserViewSet, register_view, login_admin, cambiar_contraseña_admin, admin1_view,  admin3_view, admin2_view, herramienta_detalle, cerrar_sesion, actualizar_estado_pedido, confirmar_pago, editar_herramienta_inline, eliminar_herramienta_inline, crear_orden_despacho, obtener_ordenes_despacho, actualizar_estado_orden, confirmar_pago_admin3, registrar_entrega, redireccionar_view, eliminar_del_carrito, iniciar_pago, respuesta
+from .views import contacto_view,agregar_al_carrito, PedidoViewSet, HerramientaViewSet, carrito_view, CategoriaViewSet, pedidos_View, detalle_view,  productos_view, index_view, login_view, UserViewSet, register_view, login_admin, cambiar_contraseña_admin, admin1_view,  admin3_view, admin2_view, herramienta_detalle, cerrar_sesion, actualizar_estado_pedido, confirmar_pago, editar_herramienta_inline, eliminar_herramienta_inline, crear_orden_despacho, obtener_ordenes_despacho, actualizar_estado_orden, confirmar_pago_admin3, registrar_entrega, redireccionar_view, eliminar_del_carrito, iniciar_pago, respuesta, pago_exitoso, pago_error
 from . import views
 from rest_framework import routers
 from django.conf import settings
@@ -52,6 +52,8 @@ urlpatterns = [
     path('eliminar-del-carrito/', views.eliminar_del_carrito, name='eliminar_del_carrito'),
     path('pago/iniciar/', iniciar_pago, name='iniciar_pago'),
     path('pago/respuesta/', respuesta, name='respuesta_pago'),
+    path('pago/exitoso/', pago_exitoso, name='pago_exitoso'),
+    path('pago/error/', pago_error, name='pago_error'),
 
 ]
 
