@@ -27,6 +27,7 @@
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'productos' %}">Productos</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'contacto' %}">Contacto</a></li>
                     {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'perfil' %}">Perfil</a></li>
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar Sesión</a>
                     </li>
@@ -35,7 +36,7 @@
                         <a class="nav-link text-light" href="{% url 'login' %}">Iniciar Sesión</a>
                     </li>
                     {% endif %}
-                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'carrito' %}">Carrito</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="javascript:void(0);" id="ir-al-carrito">Carrito</a></li>
                 </ul>
             </div>
         </div>
@@ -48,7 +49,7 @@
             <!-- Producto 1 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/taladro.png' %}" class="card-img-top" alt="Taladro eléctrico">
+                    <img src="{% static 'img/taladro.png' %}" class="card-img-top" alt="Taladro eléctrico">
                     <div class="card-body text-center">
                         <h5 class="card-title">Taladro Eléctrico</h5>
                         <p class="card-text">Potente taladro para trabajos de construcción y bricolaje.</p>
@@ -60,7 +61,7 @@
             <!-- Producto 2 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/martilloacero.png' %}" class="card-img-top"
+                    <img src="{% static 'img/martilloacero.png' %}" class="card-img-top"
                         alt="Martillo de acero">
                     <div class="card-body text-center">
                         <h5 class="card-title">Martillo de Acero</h5>
@@ -73,7 +74,7 @@
             <!-- Producto 3 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/setdestornilladores.png' %}" class="card-img-top"
+                    <img src="{% static 'img/setdestornilladores.png' %}" class="card-img-top"
                         alt="Set de destornilladores">
                     <div class="card-body text-center">
                         <h5 class="card-title">Set de Destornilladores</h5>
@@ -87,37 +88,13 @@
             <!-- Producto 4 -->
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/pinturainterior.png' %}" class="card-img-top" alt="Pintura">
+                    <img src="{% static 'img/pinturainterior.png' %}" class="card-img-top" alt="Pintura">
                     <div class="card-body text-center">
                         <h5 class="card-title">Pintura Interior</h5>
                         <p class="card-text">Amplia gama de colores duraderos y de fácil aplicación.</p>
                         <a href="{% url 'detalle' %}?id=P01" class="btn btn-primary btn-sm">Ver Más</a>
                         <button class="agregar-carrito btn btn-primary" data-id="P01">Agregar al carrito</button>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN POR QUÉ ELEGIRNOS -->
-    <section class="py-5 bg-white text-center">
-        <div class="container">
-            <h2 class="mb-4">¿Por qué elegirnos?</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <i class="fas fa-tools fa-3x text-success mb-3"></i>
-                    <h5>Variedad de herramientas</h5>
-                    <p>Contamos con un amplio catálogo para profesionales y aficionados.</p>
-                </div>
-                <div class="col-md-4">
-                    <i class="fas fa-truck fa-3x text-success mb-3"></i>
-                    <h5>Envíos rápidos</h5>
-                    <p>Recibe tus productos en tiempo récord en todo el país.</p>
-                </div>
-                <div class="col-md-4">
-                    <i class="fas fa-star fa-3x text-success mb-3"></i>
-                    <h5>Calidad garantizada</h5>
-                    <p>Productos de marcas reconocidas y confiables.</p>
                 </div>
             </div>
         </div>
@@ -155,47 +132,30 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         window.userIsAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
-    </script>   
-    <script src="{% static 'js/carrito.js' %}"></script>
+    </script>
+
+    <!-- Script para manejar el comportamiento del carrito -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const botones = document.querySelectorAll('.btn-agregar');
+            const carritoEnlace = document.getElementById('ir-al-carrito');
 
-            botones.forEach(boton => {
-                boton.addEventListener('click', function () {
-                    const productoId = this.getAttribute('data-id');
+            carritoEnlace.addEventListener('click', function () {
+                // Verificar si el usuario está autenticado
+                if (window.userIsAuthenticated === "false") {
+                    // Mostrar la alerta si no está autenticado
+                    alert('Debes iniciar sesión para ver tu carrito.');
 
-                    fetch("{% url 'agregar_al_carrito' %}", {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}',
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: `producto_id=${productoId}`
-                    })
-                        .then(response => {
-                            if (response.status === 401) {
-                                alert("Debes iniciar sesión para agregar productos al carrito.");
-                                window.location.href = "{% url 'login' %}";
-                            } else if (!response.ok) {
-                                throw new Error("Error al agregar al carrito");
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.mensaje) {
-                                alert(data.mensaje);
-                            }
-                        })
-                        .catch(error => {
-                            console.error(error);
-                            alert("Hubo un problema al agregar el producto al carrito.");
-                        });
-                });
+                    // Redirigir al login (opcional)
+                    window.location.href = "{% url 'login' %}";  // Redirige a la página de login
+                } else {
+                    // Si el usuario está autenticado, puede acceder al carrito
+                    window.location.href = "{% url 'carrito' %}";  // Redirige al carrito
+                }
             });
         });
     </script>
 
+    <script src="{% static 'js/carrito.js' %}"></script>
 </body>
 
 </html>

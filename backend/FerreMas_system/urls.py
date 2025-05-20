@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from FerreMas.views import pedidos_View, detalle_view, agregar_al_carrito, carrito_view, productos_view, index_view,contacto_view, login_admin, cambiar_contraseña_admin, admin1_view,  admin2_view, admin3_view, herramienta_detalle, cerrar_sesion, crear_orden_despacho, obtener_ordenes_despacho, actualizar_estado_orden, redireccionar_view, iniciar_pago, respuesta
+from FerreMas.views import pedidos_View, detalle_view,pago_error, agregar_al_carrito, carrito_view, productos_view, index_view,contacto_view, login_admin, cambiar_contraseña_admin, admin1_view,  admin2_view, admin3_view, herramienta_detalle, cerrar_sesion, crear_orden_despacho, obtener_ordenes_despacho, actualizar_estado_orden, redireccionar_view, iniciar_pago, respuesta, perfil_view
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -29,6 +29,8 @@ urlpatterns = [
     path('api/ordenes/actualizar/', actualizar_estado_orden, name='actualizar_estado_orden'),
     path('pago/iniciar/', iniciar_pago, name='iniciar_pago'),
     path('pago/respuesta/', respuesta, name='respuesta_pago'),
-]
+    path('pago/error/', pago_error, name='pago_error'),
+    path('perfil/', perfil_view, name='perfil'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

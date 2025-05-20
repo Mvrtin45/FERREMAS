@@ -70,6 +70,7 @@
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'productos' %}">Productos</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'contacto' %}">Contacto</a></li>
                     {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'perfil' %}">Perfil</a></li>
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar Sesión</a>
                     </li>
@@ -130,46 +131,35 @@
         <hr>
         <h3>Finalizar Compra</h3>
 
+        <div class="card mt-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Datos de Envío</h5>
+    </div>
+    <div class="card-body">
         <form method="post" action="{% url 'iniciar_pago' %}">
             {% csrf_token %}
-            <h4>Datos de Cliente</h4>
-            <div class="mb-3">
-                <label for="rut" class="form-label">RUT</label>
-                <input type="text" id="rut" name="rut" class="form-control" value="{{ cliente.rut }}" required>
-            </div>
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" value="{{ cliente.nombre }}" required>
-            </div>
-            <div class="mb-3">
-                <label for="apellido" class="form-label">Apellido</label>
-                <input type="text" id="apellido" name="apellido" class="form-control" value="{{ cliente.apellido }}"
-                    required>
-            </div>
-            <div class="mb-3">
-                <label for="telefono" class="form-label">Teléfono</label>
-                <input type="text" id="telefono" name="telefono" class="form-control" value="{{ cliente.telefono }}"
-                    required>
-            </div>
-
-            <h4>Datos de Envío</h4>
-            <div class="mb-3">
-                <label for="region" class="form-label">Región</label>
-                <input type="text" id="region" name="region" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="comuna" class="form-label">Comuna</label>
-                <input type="text" id="comuna" name="comuna" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="direccion" class="form-label">Dirección</label>
-                <input type="text" id="direccion" name="direccion" class="form-control" required>
-            </div>
-
             <input type="hidden" name="total" value="{{ total }}">
 
-            <button type="submit" class="btn btn-success">Pagar con Transbank</button>
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input type="text" name="direccion" id="direccion" class="form-control" required placeholder="Ej: Av. Principal 123">
+            </div>
+
+            <div class="mb-3">
+                <label for="comuna" class="form-label">Comuna</label>
+                <input type="text" name="comuna" id="comuna" class="form-control" required placeholder="Ej: Santiago">
+            </div>
+
+            <div class="mb-3">
+                <label for="region" class="form-label">Región</label>
+                <input type="text" name="region" id="region" class="form-control" required placeholder="Ej: Metropolitana">
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Pagar con Webpay</button>
         </form>
+    </div>
+</div>
+
         {% elif not user.is_authenticated %}
         <p class="alert alert-warning">Debes <a href="{% url 'login' %}">iniciar sesión</a> para poder realizar el pago.
         </p>
@@ -259,5 +249,4 @@
         });
     </script>
 </body>
-
 </html>

@@ -27,6 +27,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'productos' %}">Productos</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'contacto' %}">Contacto</a></li>
                     {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'perfil' %}">Perfil</a></li>
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar Sesión</a>
                     </li>
@@ -45,148 +46,24 @@
     <section class="container my-5">
         <h2 class="text-center mb-4">Nuestro Catálogo de Productos</h2>
         <div id="productos-container" class="row row-cols-2 row-cols-md-5 g-3">
-            <!-- Producto 1 -->
+            {% for herramienta in herramientas %}
             <div class="col">
                 <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/taladro.png' %}" class="card-img-top" alt="Taladro eléctrico" />
+                    <img src="{{ herramienta.imagen_herramienta.url }}" class="card-img-top"
+                        alt="{{ herramienta.nombre_herramienta }}" />
                     <div class="card-body text-center">
-                        <h6 class="card-title">Taladro Eléctrico</h6>
-                        <p class="card-text">Potente taladro para trabajos de construcción.</p>
-                        <p class="card-text">$25.990</p>
-                        <a href="{% url 'detalle' %}?id=E01" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="E01">Agregar al carrito</button>
+                        <h6 class="card-title">{{ herramienta.nombre_herramienta }}</h6>
+                        <p class="card-text">Categoría: {{ herramienta.categoria.nombre_categoria }}</p>
+                        <p class="card-text">${{ herramienta.precio }}</p>
+                        <p class="card-text">Stock: {{ herramienta.stock }}</p>
+                        <a href="{% url 'detalle' %}?id={{ herramienta.id }}" class="btn btn-primary btn-sm">Ver
+                            Detalles</a>
+                        <button class="agregar-carrito btn btn-primary" data-id="{{ herramienta.id }}">Agregar al
+                            carrito</button>
                     </div>
                 </div>
             </div>
-
-            <!-- Producto 2 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/martilloacero.png' %}" class="card-img-top" alt="Martillo de acero" />
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Martillo de Acero</h6>
-                        <p class="card-text">Resistente y ergonómico.</p>
-                        <p class="card-text">$11.990</p>
-                        <a href="{% url 'detalle' %}?id=M01" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="M01">Agregar al carrito</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 3 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/setdestornilladores.png' %}" class="card-img-top"
-                        alt="Juego de destornilladores" />
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Juego de Destornilladores</h6>
-                        <p class="card-text">Set completo para todo tipo de reparaciones.</p>
-                        <p class="card-text">$9.990</p>
-                        <a href="{% url 'detalle' %}?id=M02" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="M02">Agregar al carrito</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 4 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/sierraelectrica.png' %}" class="card-img-top"
-                        alt="Sierra Circular Eléctrica" />
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Sierra Circular Eléctrica</h6>
-                        <p class="card-text">Cortes precisos en madera y metal.</p>
-                        <p class="card-text">$35.990</p>
-                        <a href="{% url 'detalle' %}?id=E02" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="E02">Agregar al carrito</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 5 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/llaveinglesa.png' %}" class="card-img-top" alt="Llave Inglesa" />
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Llave Inglesa</h6>
-                        <p class="card-text">Ajustable para tuercas y pernos.</p>
-                        <p class="card-text">$8.990</p>
-                        <a href="{% url 'detalle' %}?id=M03" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="M03">Agregar al carrito</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 6 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/cintametrica.png' %}" class="card-img-top" alt="Cinta Métrica" />
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Cinta Métrica</h6>
-                        <p class="card-text">Mediciones exactas para tus proyectos.</p>
-                        <p class="card-text">$5.990</p>
-                        <a href="{% url 'detalle' %}?id=M04" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="M04">Agregar al carrito</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 7 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/taladropercutor.png' %}" class="card-img-top" alt="Taladro Percutor" />
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Taladro Percutor</h6>
-                        <p class="card-text">Ideal para concreto y ladrillo.</p>
-                        <p class="card-text">$29.990</p>
-                        <a href="{% url 'detalle' %}?id=E03" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="E03">Agregar al carrito</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 8 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/cajaherramientas.png' %}" class="card-img-top" alt="Caja de Herramientas" />
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Caja de Herramientas</h6>
-                        <p class="card-text">Organización para todas tus herramientas.</p>
-                        <p class="card-text">$19.990</p>
-                        <a href="{% url 'detalle' %}?id=M05" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="M05">Agregar al carrito</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 9 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/esmerilangular.png' %}" class="card-img-top" alt="Esmeril Angular" />
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Esmeril Angular</h6>
-                        <p class="card-text">Pulidos y cortes precisos.</p>
-                        <p class="card-text">$39.990</p>
-                        <a href="{% url 'detalle' %}?id=E04" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="E04">Agregar al carrito</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 10 -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="{% static 'img/Herramientas/pinturaexterior.png' %}" class="card-img-top" alt="Pintura Exterior" />
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Pintura Exterior</h6>
-                        <p class="card-text">Colores duraderos para exteriores.</p>
-                        <p class="card-text">$22.990</p>
-                        <a href="{% url 'detalle' %}?id=P01" class="btn btn-primary btn-sm">Ver Detalles</a>
-                        <button class="agregar-carrito btn btn-primary" data-id="P01">Agregar al carrito</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+            {% endfor %}
     </section>
 
     <!-- FOOTER -->
@@ -202,7 +79,8 @@
                 </div>
                 <div class="col-md-4">
                     <h5>Sobre nosotros</h5>
-                    <p>Ferretería con más de 20 años ofreciendo herramientas de calidad para el hogar y la industria.</p>
+                    <p>Ferretería con más de 20 años ofreciendo herramientas de calidad para el hogar y la industria.
+                    </p>
                 </div>
                 <div class="col-md-4">
                     <h5>Síguenos</h5>
@@ -221,43 +99,25 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         window.userIsAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
-    </script>   
+    </script>
     <script src="{% static 'js/carrito.js' %}"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const botones = document.querySelectorAll('.btn-agregar');
+            const carritoEnlace = document.getElementById('ir-al-carrito');
 
-            botones.forEach(boton => {
-                boton.addEventListener('click', function () {
-                    const productoId = this.getAttribute('data-id');
+            carritoEnlace.addEventListener('click', function () {
+                // Verificar si el usuario está autenticado
+                if (window.userIsAuthenticated === "false") {
+                    // Mostrar la alerta si no está autenticado
+                    alert('Debes iniciar sesión para ver tu carrito.');
 
-                    fetch("{% url 'agregar_al_carrito' %}", {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}',
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: `producto_id=${productoId}`
-                    })
-                        .then(response => {
-                            if (response.status === 401) {
-                                alert("Debes iniciar sesión para agregar productos al carrito.");
-                                window.location.href = "{% url 'login' %}";
-                            } else if (!response.ok) {
-                                throw new Error("Error al agregar al carrito");
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.mensaje) {
-                                alert(data.mensaje);
-                            }
-                        })
-                        .catch(error => {
-                            console.error(error);
-                            alert("Hubo un problema al agregar el producto al carrito.");
-                        });
-                });
+                    // Redirigir al login (opcional)
+                    window.location.href = "{% url 'login' %}";  // Redirige a la página de login
+                } else {
+                    // Si el usuario está autenticado, puede acceder al carrito
+                    window.location.href = "{% url 'carrito' %}";  // Redirige al carrito
+                }
             });
         });
     </script>

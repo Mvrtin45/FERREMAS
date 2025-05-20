@@ -9,16 +9,17 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.db import models
+from django.db import models 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import uuid
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
+from django.urls import reverse
 from transbank.webpay.webpay_plus.transaction import Transaction
 from transbank.common.options import WebpayOptions
 from transbank.common.integration_type import IntegrationType
-
+from django.db import IntegrityError
 
 # Create your views here.
 
@@ -34,53 +35,74 @@ tx = Transaction(options)
 @login_required
 def iniciar_pago(request):
     if request.method == 'POST':
+        direccion = request.POST.get('direccion')
         region = request.POST.get('region')
         comuna = request.POST.get('comuna')
-        direccion = request.POST.get('direccion')
-        telefono = request.POST.get('telefono')
         monto = float(request.POST.get('total'))
 
+        # 1. Obtener el cliente
         cliente = Cliente.objects.filter(user=request.user).first()
-        if not cliente:
-            messages.error(request, "Cliente no encontrado.")
-            return redirect('carrito')
+        if not cliente or not all([cliente.rut, cliente.nombre, cliente.apellido, cliente.telefono]):
+            messages.warning(request, "Debes completar tu perfil antes de realizar el pago.")
+            return redirect('perfil')
 
-        # Actualizar datos en el modelo Cliente
+        # 2. Actualizar datos de envío en cliente
+        cliente.direccion = direccion
         cliente.region = region
         cliente.comuna = comuna
-        cliente.direccion = direccion
-        cliente.telefono = telefono
         cliente.save()
 
-        # Buscar pedido pendiente
-        pedido = Pedido.objects.filter(cliente=cliente, estado='pendiente').order_by('-fecha_pedido').first()
-        if not pedido:
-            messages.error(request, "No se encontró un pedido para pagar.")
+        # 3. Obtener el carrito desde la sesión
+        carrito = request.session.get('carrito', {})
+        if not carrito:
+            messages.error(request, "Tu carrito está vacío.")
             return redirect('carrito')
 
-        # Registrar datos en el pedido también
-        pedido.region = region
-        pedido.comuna = comuna
-        pedido.direccion = direccion
-        pedido.fecha_pedido = timezone.now()
-        pedido.save()
+        # 4. Crear Pedido
+        pedido = Pedido.objects.create(
+            cliente=cliente,
+            direccion=direccion,
+            region=region,
+            comuna=comuna,
+            estado='pendiente',
+        )
 
-        # Crear transacción con Transbank
+        # 5. Crear Detalles del Pedido
+        total = 0
+        for producto_id, cantidad in carrito.items():
+            try:
+                herramienta = Herramienta.objects.get(pk=producto_id)
+                subtotal = herramienta.precio * cantidad
+                total += subtotal
+
+                DetallePedido.objects.create(
+                    pedido=pedido,
+                    herramienta=herramienta,
+                    cantidad=cantidad,
+                    precio=herramienta.precio,
+                    total=subtotal
+                )
+            except Herramienta.DoesNotExist:
+                continue
+
+        # 6. Crear transacción con Transbank
         buy_order = str(uuid.uuid4())[:26]
         session_id = str(uuid.uuid4())[:61]
         return_url = request.build_absolute_uri('/pago/respuesta/')
-        response = tx.create(buy_order, session_id, monto, return_url)
+        response = tx.create(buy_order, session_id, total, return_url)
 
-        # Guardar pago preliminar
+        # 7. Guardar pago preliminar
         Pago.objects.update_or_create(
             pedido=pedido,
-            defaults={'monto': monto, 'confirmado': False}
+            defaults={'monto': total, 'confirmado': False}
         )
+
+        # 8. Limpiar el carrito de la sesión
+        request.session['carrito'] = {}
 
         return redirect(f"{response['url']}?token_ws={response['token']}")
 
-    return redirect('pago_exitoso.html')
-
+    return redirect('carrito')
 
 @csrf_exempt
 def respuesta(request):
@@ -110,16 +132,28 @@ def respuesta(request):
         pago.confirmado = True
         pago.save()
 
-        # Descontar stock (suponiendo que pedido tiene detalles relacionados)
         for item in pedido.detalles.all():
             herramienta = item.herramienta
-            herramienta.stock -= item.cantidad
-            herramienta.save()
+            if herramienta.stock >= item.cantidad:
+                herramienta.stock -= item.cantidad
+                herramienta.save()
+            else:
+                # Opción 1: Cancelar el pedido y mostrar error
+                pedido.estado = 'pendiente'
+                pedido.save()
+                messages.error(request, f"No hay suficiente stock de {herramienta.nombre_herramienta}.")
+                return render(request, 'pago_error.html', {
+                'response': response,
+                'error': f"Stock insuficiente para {herramienta.nombre_herramienta}."
+                })
+
+        # Vaciar carrito
+        if 'carrito' in request.session:
+            del request.session['carrito']
 
         return render(request, 'pago_exitoso.html', {'response': response})
 
-    else:
-        return render(request, 'pago_error.html', {'response': response})
+    return render(request, 'pago_error.html', {'response': response})
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -158,6 +192,37 @@ ESTADOS_PEDIDO = [
     ('procesado', 'Procesado'),
     ('pagado', 'Pagado'),
 ]
+
+# VISTA PARA PERFIL USUARIO: 
+def perfil_view(request):
+    cliente, creado = Cliente.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        rut = request.POST.get('rut')
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        telefono = request.POST.get('telefono')
+        direccion = request.POST.get('direccion')
+        region = request.POST.get('region')
+        comuna = request.POST.get('comuna')
+
+        if not all([rut, nombre, apellido, telefono]):
+            messages.error(request, "Por favor, completa los campos obligatorios.")
+            return redirect('perfil')
+
+        cliente.rut = rut
+        cliente.nombre = nombre
+        cliente.apellido = apellido
+        cliente.telefono = telefono
+        cliente.direccion = direccion
+        cliente.region = region
+        cliente.comuna = comuna
+        cliente.save()
+
+        messages.success(request, "Perfil actualizado correctamente.")
+        return redirect('carrito')
+
+    return render(request, 'perfil.html', {'cliente': cliente})
 
 # VISTA PARA ADMIN 1
 def admin1_view(request):
@@ -307,11 +372,23 @@ def detalle_view(request):
 
 #vista para ver los productos
 def productos_view(request):
-    return render(request, 'productos.html')
+    herramientas = Herramienta.objects.all()  # Consulta todos los productos
+    return render(request, 'productos.html', {'herramientas': herramientas})
 
 #vista para ver los productos
 def index_view(request):
-    return render(request, 'index.html')
+    # Diccionario de códigos a IDs
+    codigos_a_ids = {
+        'P01': 4,  
+        'M02': 3,
+        'M01': 2,
+        'E01': 1,
+    }
+    ids_destacados = list(codigos_a_ids.values())
+    
+    # Filtrar usando los IDs
+    herramientas_destacadas = Herramienta.objects.filter(id__in=ids_destacados)
+    return render(request, 'index.html', {'herramientas_destacadas': herramientas_destacadas})
 
 #vista para ver los productos
 def contacto_view(request):
@@ -490,12 +567,16 @@ def carrito_view(request):
 
     cliente = Cliente.objects.filter(user=request.user).first()
 
+    # Verificar si el perfil del cliente está incompleto
+    if cliente and not all([cliente.rut, cliente.nombre, cliente.apellido, cliente.telefono]):
+        messages.warning(request, "Debes completar tu perfil antes de continuar.")
+        return redirect('perfil')  # Asegúrate de tener esta ruta en urls.py
+
     return render(request, 'carrito.html', {
         'productos_en_carrito': herramientas,
         'total': total,
         'cliente': cliente,
     })
-
 
 @csrf_exempt
 @require_POST
@@ -543,3 +624,36 @@ def eliminar_del_carrito(request):
 
 def redireccionar_view(request):
     return render(request, 'redireccionar.html')
+
+
+
+def subir_herramienta(request):
+    if request.method == 'POST':
+        id = request.POST.get('id')
+        # ... otros datos
+
+        if Herramienta.objects.filter(id=id).exists():
+            # Manejar error: ya existe la herramienta con ese ID
+            categorias = Categoria.objects.all()
+            error_msg = "Ya existe una herramienta con ese ID."
+            return render(request, 'subir_herramienta.html', {'categorias': categorias, 'error_msg': error_msg})
+
+        try:
+            Herramienta.objects.create(
+                id=id,
+                nombre_herramienta=request.POST.get('nombre_herramienta'),
+                categoria_id=request.POST.get('categoria'),
+                precio=request.POST.get('precio'),
+                stock=request.POST.get('stock'),
+                imagen_herramienta=request.FILES.get('imagen_herramienta')
+            )
+            return redirect('admin2')
+        except IntegrityError:
+            categorias = Categoria.objects.all()
+            error_msg = "Error al guardar la herramienta. Verifique los datos."
+            return render(request, 'subir_herramienta.html', {'categorias': categorias, 'error_msg': error_msg})
+
+    categorias = Categoria.objects.all()
+    return render(request, 'subir_herramienta.html', {'categorias': categorias})
+
+

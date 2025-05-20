@@ -24,10 +24,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                  <li class="nav-item"><a class="nav-link text-light" href="{% url 'index' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'index' %}">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'productos' %}">Productos</a></li>
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'contacto' %}">Contacto</a></li>
                     {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'perfil' %}">Perfil</a></li>
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar Sesión</a>
                     </li>
@@ -36,7 +37,7 @@
                         <a class="nav-link text-light" href="{% url 'login' %}">Iniciar Sesión</a>
                     </li>
                     {% endif %}
-                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'carrito' %}">Carrito</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="javascript:void(0);" id="ir-al-carrito">Carrito</a></li>
                 </ul>
             </div>
         </div>
@@ -75,9 +76,32 @@
     </footer>
 
     <!-- JS -->
-    <script src="{% static 'js/detalle.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para verificar la autenticación del usuario y manejar el clic en el carrito -->
+    <script>
+        window.userIsAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const carritoEnlace = document.getElementById('ir-al-carrito');
+
+            carritoEnlace.addEventListener('click', function () {
+                // Verificar si el usuario está autenticado
+                if (window.userIsAuthenticated === "false") {
+                    // Mostrar la alerta si no está autenticado
+                    alert('Debes iniciar sesión para ver tu carrito.');
+
+                    // Redirigir al login (opcional)
+                    window.location.href = "{% url 'login' %}";  // Redirige a la página de login
+                } else {
+                    // Si el usuario está autenticado, puede acceder al carrito
+                    window.location.href = "{% url 'carrito' %}";  // Redirige al carrito
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

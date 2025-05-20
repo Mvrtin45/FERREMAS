@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                     <div class="col-md-6">
                         <h2>${producto.nombre}</h2>
-                        <p>${producto.descripcion}</p>
                         <p><strong>Precio:</strong> $${precio.toLocaleString()}</p>
                         <button class="agregar-carrito btn btn-success"
                             data-id="${producto.id}">

@@ -28,6 +28,7 @@
                     <li class="nav-item"><a class="nav-link text-light" href="{% url 'productos' %}">Productos</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'contacto' %}">Contacto</a></li>
                     {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'perfil' %}">Perfil</a></li>
                     <li class="nav-item">
                         <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar Sesión</a>
                     </li>
@@ -36,7 +37,7 @@
                         <a class="nav-link text-light" href="{% url 'login' %}">Iniciar Sesión</a>
                     </li>
                     {% endif %}
-                    <li class="nav-item"><a class="nav-link text-light" href="{% url 'carrito' %}">Carrito</a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="javascript:void(0);" id="ir-al-carrito">Carrito</a></li>
                 </ul>
             </div>
         </div>
@@ -104,6 +105,27 @@
                 title: "Sucursal Plaza Norte - Duoc UC",
             });
         }
+    </script>
+    <script>
+        window.userIsAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}";
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const carritoEnlace = document.getElementById('ir-al-carrito');
+
+            carritoEnlace.addEventListener('click', function () {
+                // Verificar si el usuario está autenticado
+                if (window.userIsAuthenticated === "false") {
+                    // Mostrar la alerta si no está autenticado
+                    alert('Debes iniciar sesión para ver tu carrito.');
+
+                    // Redirigir al login (opcional)
+                    window.location.href = "{% url 'login' %}";  // Redirige a la página de login
+                } else {
+                    // Si el usuario está autenticado, puede acceder al carrito
+                    window.location.href = "{% url 'carrito' %}";  // Redirige al carrito
+                }
+            });
+        });
     </script>
 </body>
 
