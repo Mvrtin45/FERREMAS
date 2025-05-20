@@ -114,24 +114,18 @@ def respuesta(request):
     if not token:
         messages.error(request, "Token no recibido.")
         return redirect('carrito')
-
     response = tx.commit(token)
-
     if response['status'] == 'AUTHORIZED':
         cliente = Cliente.objects.filter(user=request.user).first()
         pedido = Pedido.objects.filter(cliente=cliente, estado='pendiente').order_by('-fecha_pedido').first()
-
         if not pedido:
             return render(request, 'pago_error.html', {'response': response, 'error': 'No se encontró una orden válida.'})
-
         pedido.estado = 'pagado'
         pedido.fecha_pedido = timezone.now()
         pedido.save()
-
         pago = Pago.objects.get(pedido=pedido)
         pago.confirmado = True
         pago.save()
-
         for item in pedido.detalles.all():
             herramienta = item.herramienta
             if herramienta.stock >= item.cantidad:
@@ -146,7 +140,6 @@ def respuesta(request):
                 'response': response,
                 'error': f"Stock insuficiente para {herramienta.nombre_herramienta}."
                 })
-
         # Vaciar carrito
         if 'carrito' in request.session:
             del request.session['carrito']
