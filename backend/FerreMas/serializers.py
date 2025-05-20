@@ -15,6 +15,7 @@ class HerramientaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Herramienta
         fields = '__all__'
+        
 class DetallePedidoSerializer(serializers.ModelSerializer):
     herramienta_nombre = serializers.CharField(source='herramienta.nombre', read_only=True)
 

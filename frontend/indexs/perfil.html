@@ -51,42 +51,61 @@
                         <h4 class="mb-0">Editar Perfil</h4>
                     </div>
                     <div class="card-body">
+                        <!-- MENSAJES DE DJANGO -->
+                        {% if messages %}
+                        <div class="mb-4">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                         <form method="post" novalidate>
                             {% csrf_token %}
 
                             <div class="mb-3">
-                                <label for="rut" class="form-label fw-semibold">RUT *</label>
-                                <input type="text" name="rut" id="rut" class="form-control" required value="{{ cliente.rut }}">
+                                <label for="rut" class="form-label fw-semibold">RUT * (Debe Ser Sin Puntos Ni Guión)</label>
+                                <input type="text" name="rut" id="rut" class="form-control" required
+                                    value="{{ cliente.rut }}">
                             </div>
 
                             <div class="mb-3">
                                 <label for="nombre" class="form-label fw-semibold">Nombre *</label>
-                                <input type="text" name="nombre" id="nombre" class="form-control" required value="{{ cliente.nombre }}">
+                                <input type="text" name="nombre" id="nombre" class="form-control" required
+                                    value="{{ cliente.nombre }}">
                             </div>
 
                             <div class="mb-3">
                                 <label for="apellido" class="form-label fw-semibold">Apellido *</label>
-                                <input type="text" name="apellido" id="apellido" class="form-control" required value="{{ cliente.apellido }}">
+                                <input type="text" name="apellido" id="apellido" class="form-control" required
+                                    value="{{ cliente.apellido }}">
                             </div>
 
                             <div class="mb-3">
                                 <label for="telefono" class="form-label fw-semibold">Teléfono *</label>
-                                <input type="text" name="telefono" id="telefono" class="form-control" required value="{{ cliente.telefono }}">
+                                <input type="text" name="telefono" id="telefono" class="form-control" required
+                                    value="{{ cliente.telefono }}">
                             </div>
 
                             <div class="mb-3">
                                 <label for="direccion" class="form-label fw-semibold">Dirección</label>
-                                <input type="text" name="direccion" id="direccion" class="form-control" value="{{ cliente.direccion }}">
+                                <input type="text" name="direccion" id="direccion" class="form-control"
+                                    value="{{ cliente.direccion }}">
                             </div>
 
                             <div class="mb-3">
                                 <label for="region" class="form-label fw-semibold">Región</label>
-                                <input type="text" name="region" id="region" class="form-control" value="{{ cliente.region }}">
+                                <input type="text" name="region" id="region" class="form-control"
+                                    value="{{ cliente.region }}">
                             </div>
 
                             <div class="mb-3">
                                 <label for="comuna" class="form-label fw-semibold">Comuna</label>
-                                <input type="text" name="comuna" id="comuna" class="form-control" value="{{ cliente.comuna }}">
+                                <input type="text" name="comuna" id="comuna" class="form-control"
+                                    value="{{ cliente.comuna }}">
                             </div>
 
                             <div class="text-center mt-4">
@@ -133,7 +152,8 @@
                 </div>
                 <div class="col-md-4">
                     <h5>Sobre nosotros</h5>
-                    <p>Ferretería con más de 20 años ofreciendo herramientas de calidad para el hogar y la industria.</p>
+                    <p>Ferretería con más de 20 años ofreciendo herramientas de calidad para el hogar y la industria.
+                    </p>
                 </div>
                 <div class="col-md-4">
                     <h5>Síguenos</h5>
