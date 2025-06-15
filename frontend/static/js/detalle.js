@@ -1,4 +1,4 @@
-// Obtener cookie CSRF (para Django)
+// Obtener CSRF para cuando hagamos operaciones de POST, etc.
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -6,7 +6,7 @@ function getCookie(name) {
         for (let cookie of cookies) {
             cookie = cookie.trim();
             if (cookie.startsWith(name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1)); 
                 break;
             }
         }
@@ -16,21 +16,20 @@ function getCookie(name) {
 
 document.addEventListener("DOMContentLoaded", function () {
     const params = new URLSearchParams(window.location.search);
-    const idProducto = params.get("id");
+    const idProducto = new URLSearchParams(window.location.search).get("id"); 
 
     if (!idProducto) {
         document.getElementById("detalle-producto").innerHTML = "<p>Producto no especificado.</p>";
         return;
     }
 
-    fetch(`/api/herramienta/${idProducto}/`)
+    fetch(`/api/Herramienta/${idProducto}/`)
         .then(response => {
-            if (!response.ok) throw new Error("Producto no encontrado");
+            if (!response.ok) throw new Error("Producto no encontrado.");
             return response.json();
         })
         .then(producto => {
             const contenedor = document.getElementById("detalle-producto");
-            let precio = parseFloat(producto.precio) || 0;
 
             contenedor.innerHTML = `
                 <div class="row">
@@ -38,41 +37,41 @@ document.addEventListener("DOMContentLoaded", function () {
                         <img src="${producto.imagen}" alt="${producto.nombre}" class="img-fluid">
                     </div>
                     <div class="col-md-6">
-                        <h2>${producto.nombre}</h2>
-                        <p><strong>Precio:</strong> $${precio.toLocaleString()}</p>
-                        <button class="agregar-carrito btn btn-success"
-                            data-id="${producto.id}">
+                        <h2>${producto.nombre_herramienta}</h2>
+                        <p><strong>Precio:</strong> $${producto.precio.toLocaleString()}</p>
+                        <p>Stock disponible: ${producto.stock}</p>
+                        <button class="agregar-carrito btn btn-success" id="agregar" data-id="${producto.id}">
                             Agregar al carrito
                         </button>
                     </div>
                 </div>
             `;
 
-            // Agregar evento al botón después de insertarlo
-            const boton = contenedor.querySelector(".agregar-carrito");
-            boton.addEventListener("click", function () {
-                const productoId = this.getAttribute("data-id");
 
-                fetch("/api/agregar-carrito/", {
-                    method: "POST",
-                    headers: {
+            document.getElementById('agregar').addEventListener('click', function () {
+                const id = this.dataset.id;
+
+                fetch('/api/agregar-carrito/', {
+                    method:'POST',
+                    headers:{ 
                         "Content-Type": "application/json",
                         "X-CSRFToken": getCookie("csrftoken"),
                     },
-                    body: JSON.stringify({ producto_id: productoId }),
+                    body: JSON.stringify({producto_id: id}),
                 })
-                    .then(response => {
-                        if (!response.ok) throw new Error("Error al agregar al carrito");
-                        return response.json();
-                    })
-                    .then(data => {
-                        alert(data.mensaje || "Producto agregado al carrito");
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        alert("Error al agregar al carrito");
-                    });
+                .then(r=>{
+                    if (!r.ok) throw new Error("Error al añadir al carrito.");
+                    return r.json();
+                })
+                .then(data=>{
+                    alert(data.mensaje);
+                })
+                .catch(err=>{
+                    console.error(err);
+                    alert("Error.");
+                })
             });
+
         })
         .catch(error => {
             document.getElementById("detalle-producto").innerHTML = "<p>Producto no encontrado.</p>";

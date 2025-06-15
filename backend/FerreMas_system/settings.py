@@ -66,7 +66,7 @@ WSGI_APPLICATION = 'FerreMas_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'localhost:1521/XEPDB1',
+        'NAME': 'localhost:1521/XE',
         'USER' : 'Ferremas',
         'PASSWORD' : 'ferre123'
     }

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from .models import Pedido, Herramienta, Categoria, Administrador, Pago, DetallePedido, OrdenDespacho, Cliente
 from rest_framework import viewsets
 from django.contrib.auth import authenticate, login, logout
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.db import models 
@@ -362,6 +362,21 @@ def actualizar_estado_orden(request):
 #VISTA PARA VER DETALLE DE LOS PRODUCTOS
 def detalle_view(request):
     return render(request, 'detalle.html')
+
+#API PARA VER DETALLE HERRAMIENTAS 
+def herramienta_api_view(request, pk):
+    if request.method == "GET":
+        herramienta = get_object_or_404(Herramienta, pk=pk)
+        data = {
+            "id": herramienta.id,
+            "nombre_herramienta": herramienta.nombre_herramienta,
+            "precio": herramienta.precio,
+            "stock": herramienta.stock,
+            "imagen": herramienta.imagen_herramienta.url if herramienta.imagen_herramienta else '',
+        }
+        return JsonResponse(data)
+    else:
+        return HttpResponseNotAllowed(['GET'])
 
 #vista para ver los productos
 def productos_view(request):
