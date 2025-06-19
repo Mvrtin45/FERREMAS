@@ -3,9 +3,10 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['username', 'password','first_name', 'last_name', 'email', 'is_active']
 
 class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,10 +25,17 @@ class DetallePedidoSerializer(serializers.ModelSerializer):
         fields = ['id', 'herramienta', 'herramienta_nombre', 'cantidad', 'precio', 'total']
 
 class PedidoSerializer(serializers.ModelSerializer):
-    detalles = DetallePedidoSerializer(many=True, read_only=True)
+    detalles = DetallePedidoSerializer(many=True)
     class Meta:
         model = Pedido
-        fields = ['id', 'fecha_pedido', 'detalles']
+        fields = ['id', 'cliente', 'fecha_pedido','direccion','comuna','region', 'estado', 'detalles']
+
+    def create(self, validated_data):
+        detalles_data = validated_data.pop('detalles')
+        pedido = Pedido.objects.create(**validated_data)
+        for detalle_data in detalles_data:
+            DetallePedido.objects.create(pedido=pedido, **detalle_data)
+        return pedido
 
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
