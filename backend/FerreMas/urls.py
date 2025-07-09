@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import contacto_view,agregar_al_carrito, PedidoViewSet, HerramientaViewSet, carrito_view, CategoriaViewSet, herramienta_api_view, pedidos_View, detalle_view,  productos_view, index_view, login_view, UserViewSet, register_view, login_admin, cambiar_contraseña_admin, admin1_view,  admin3_view, admin2_view, herramienta_detalle, cerrar_sesion, actualizar_estado_pedido, confirmar_pago, editar_herramienta_inline, eliminar_herramienta_inline, crear_orden_despacho, obtener_ordenes_despacho, actualizar_estado_orden, confirmar_pago_admin3, registrar_entrega, redireccionar_view, eliminar_del_carrito, iniciar_pago, respuesta, pago_exitoso, pago_error, perfil_view,subir_herramienta, admin0_view, agregar_herramienta_admin0, editar_categoria_admin0, editar_herramienta_admin0, eliminar_herramienta_admin0, eliminar_categoria_admin0, agregar_categoria_admin0, detalle_pedido_api  
+from .views import contacto_view,agregar_al_carrito, PedidoViewSet, HerramientaViewSet, carrito_view, CategoriaViewSet, herramienta_api_view, pedidos_View, detalle_view,  productos_view, index_view, login_view, UserViewSet, register_view, login_admin, cambiar_contraseña_admin, admin1_view,  admin3_view, admin2_view, herramienta_detalle, cerrar_sesion, actualizar_estado_pedido, confirmar_pago, editar_herramienta_inline, eliminar_herramienta_inline, crear_orden_despacho, obtener_ordenes_despacho, actualizar_estado_orden, confirmar_pago_admin3, registrar_entrega, redireccionar_view, eliminar_del_carrito, iniciar_pago, respuesta, pago_exitoso, pago_error, perfil_view,subir_herramienta, admin0_view, agregar_herramienta_admin0, editar_categoria_admin0, editar_herramienta_admin0, eliminar_herramienta_admin0, eliminar_categoria_admin0, agregar_categoria_admin0, detalle_pedido_api   
 from . import views
 from rest_framework import routers
 from django.conf import settings
@@ -64,7 +64,7 @@ urlpatterns = [
     path('admin0/editar_categoria/<str:pk>/', views.editar_categoria_admin0, name='editar_categoria'),
     path('admin0/eliminar_categoria/<str:pk>/', views.eliminar_categoria_admin0, name='eliminar_categoria'),
     path('admin0/agregar_categoria/', views.agregar_categoria_admin0, name='agregar_categoria'),
-    path('api/pedidos/<int:pk>/detalle/', views.detalle_pedido_api, name='detalle_pedido_api'),
+    path('api/detalle_pedido/<int:pedido_id>/', views.detalle_pedido_api, name='detalle_pedido_api'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

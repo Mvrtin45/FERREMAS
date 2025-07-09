@@ -1,8 +1,10 @@
+/* Fondo general */
 body {
     background-image: url('../img/fondo.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -10,18 +12,51 @@ body {
     padding-top: 50px;
 }
 
-.container {
-    background-color: rgba(255, 255, 255, 0.95);
-}
-
-h1, h4 {
-    color: #333;
-}
-
-.table th, .table td {
-    vertical-align: middle;
-}
-
-.btn {
+/* Contenedor principal */
+main.container {
+    background: rgba(0, 0, 0, 0.85);
     border-radius: 10px;
+    padding: 30px;
+    color: #fff;
+    max-width: 1200px;
+}
+
+/* Títulos y textos */
+h1, h2, h4, p {
+    color: #fff;
+}
+
+/* Tablas */
+.table th,
+.table td {
+    vertical-align: middle;
+    color: #fff;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-striped > tbody > tr:nth-of-type(even) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Botones */
+button.btn {
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+/* Secciones específicas */
+section {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+section h2 {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 10px;
 }

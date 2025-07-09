@@ -506,26 +506,32 @@ def eliminar_categoria_admin0(request, pk):
     return redirect('admin0')
 
 #VISTA PARA MOSTRAR DETALLE DE LOS PEDIDOS LLAMANDO A LA API
-def detalle_pedido_api(request, pk):
-    pedido = get_object_or_404(Pedido, pk=pk)
-    detalles = pedido.detalles.all()  # related_name='detalles'
-    
-    detalles_data = []
-    for detalle in detalles:
-        detalles_data.append({
-            'herramienta': detalle.herramienta.nombre_herramienta,
-            'cantidad': detalle.cantidad,
-            'precio': float(detalle.precio),
-            'total': float(detalle.total),
-        })
-    
-    data = {
-        'cliente': pedido.cliente.user.username,
-        'direccion': pedido.direccion,
-        'estado': pedido.estado,
-        'detalles': detalles_data,
-    }
-    return JsonResponse(data)
+def detalle_pedido_api(request, pedido_id):
+    try:
+        pedido = Pedido.objects.get(id=pedido_id)
+        detalles = pedido.detalles.select_related('herramienta').all()
+
+        detalles_data = []
+        for det in detalles:
+            detalles_data.append({
+                "herramienta": det.herramienta.nombre_herramienta,
+                "cantidad": det.cantidad,
+                "precio": float(det.precio),
+                "imagen": det.herramienta.imagen_herramienta.url if det.herramienta.imagen_herramienta else ""
+            })
+
+        data = {
+            "id": pedido.id,
+            "cliente": pedido.cliente.user.username,
+            "estado": pedido.estado,
+            "fecha": pedido.fecha_pedido.strftime("%Y-%m-%d %H:%M"),
+            "detalles": detalles_data
+        }
+
+        return JsonResponse(data)
+
+    except Pedido.DoesNotExist:
+        return JsonResponse({"error": "Pedido no encontrado"}, status=404)
 
 #VISTA PARA LOGIN
 def login_view(request):
