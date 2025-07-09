@@ -402,6 +402,131 @@ def index_view(request):
 def contacto_view(request):
     return render(request, 'contacto.html')
 
+#vista para el administrador 0
+def admin0_view(request):
+    herramientas = Herramienta.objects.select_related('categoria').all()
+    categorias = Categoria.objects.all()
+    usuarios = User.objects.all()
+    pedidos = Pedido.objects.select_related('cliente__user').all()
+
+    context = {
+        'herramientas': herramientas,
+        'categorias': categorias,
+        'usuarios': usuarios,
+        'pedidos': pedidos
+    }
+
+    return render(request, 'admin0.html', context)
+
+# VISTA PARA SUBIR HERRAMIENTA DEL ADMIN 0 
+def agregar_herramienta_admin0(request):
+    if request.method == "POST":
+        # Obtener datos del formulario
+        id_herr = request.POST.get('id') 
+        nombre = request.POST.get('nombre_herramienta')
+        categoria_id = request.POST.get('categoria')
+        precio = request.POST.get('precio')
+        stock = request.POST.get('stock')
+        imagen = request.FILES.get('imagen_herramienta')  # Aquí se obtiene la imagen subida
+
+        if not id_herr:
+            id_herr = f"H-{Herramienta.objects.count() + 1:04d}"
+
+        # Crear la instancia y guardar
+        Herramienta.objects.create(
+            id=id_herr,
+            nombre_herramienta=nombre,
+            categoria_id=categoria_id,
+            precio=precio,
+            stock=stock,
+            imagen_herramienta=imagen
+        )
+
+        return redirect('admin0')
+
+#VISTA PARA EDITAR HERRAMIENTA DEL ADMIN 0
+def editar_herramienta_admin0(request, pk):
+    herramienta = get_object_or_404(Herramienta, pk=pk)
+
+    if request.method == "POST":
+        herramienta.nombre_herramienta = request.POST.get('nombre_herramienta')
+        herramienta.categoria_id = request.POST.get('categoria')
+        herramienta.precio = request.POST.get('precio')
+        herramienta.stock = request.POST.get('stock')
+
+        # Manejar imagen si se subió una nueva
+        if 'imagen_herramienta' in request.FILES:
+            herramienta.imagen_herramienta = request.FILES['imagen_herramienta']
+
+        herramienta.save()
+        return redirect('admin0')
+
+#VISTA PARA ELIMINAR HERRAMIENTA DEL ADMIN 0
+def eliminar_herramienta_admin0(request, pk):
+    if request.method == "POST":
+        herramienta = get_object_or_404(Herramienta, pk=pk)
+        herramienta.delete()
+    return redirect('admin0')
+
+#VISTA PARA AGREGAR CATEGORIA DEL ADMIN 0
+def agregar_categoria_admin0(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre_categoria', '').strip()
+
+        if not nombre:
+            messages.error(request, "El nombre de la categoría no puede estar vacío.")
+            return redirect('admin0')
+
+        # Validar si ya existe ignorando mayúsculas/minúsculas
+        if Categoria.objects.filter(nombre_categoria__iexact=nombre).exists():
+            messages.warning(request, f"La categoría '{nombre}' ya existe.")
+            return redirect('admin0')
+
+        # Crear la categoría
+        Categoria.objects.create(nombre_categoria=nombre)
+        messages.success(request, f"Categoría '{nombre}' agregada correctamente.")
+        return redirect('admin0')
+
+#VISTA PARA EDITAR CATEGORIA DEL ADMIN 0
+def editar_categoria_admin0(request, pk):
+    categoria = get_object_or_404(Categoria, pk=pk)
+
+    if request.method == 'POST':
+        nuevo_nombre = request.POST.get('nombre_categoria', '').strip()
+        if nuevo_nombre:
+            categoria.nombre_categoria = nuevo_nombre
+            categoria.save()
+        return redirect('admin0')
+
+#VISTA PARA ELIMINAR CATEGORIA DEL ADMIN 0
+def eliminar_categoria_admin0(request, pk):
+    if request.method == "POST":
+        categoria = get_object_or_404(Categoria, pk=pk)
+        categoria.delete()
+    return redirect('admin0')
+
+#VISTA PARA MOSTRAR DETALLE DE LOS PEDIDOS LLAMANDO A LA API
+def detalle_pedido_api(request, pk):
+    pedido = get_object_or_404(Pedido, pk=pk)
+    detalles = pedido.detalles.all()  # related_name='detalles'
+    
+    detalles_data = []
+    for detalle in detalles:
+        detalles_data.append({
+            'herramienta': detalle.herramienta.nombre_herramienta,
+            'cantidad': detalle.cantidad,
+            'precio': float(detalle.precio),
+            'total': float(detalle.total),
+        })
+    
+    data = {
+        'cliente': pedido.cliente.user.username,
+        'direccion': pedido.direccion,
+        'estado': pedido.estado,
+        'detalles': detalles_data,
+    }
+    return JsonResponse(data)
+
 #VISTA PARA LOGIN
 def login_view(request):
     if request.method == 'POST':

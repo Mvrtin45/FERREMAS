@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import contacto_view,agregar_al_carrito, PedidoViewSet, HerramientaViewSet, carrito_view, CategoriaViewSet, herramienta_api_view, pedidos_View, detalle_view,  productos_view, index_view, login_view, UserViewSet, register_view, login_admin, cambiar_contraseña_admin, admin1_view,  admin3_view, admin2_view, herramienta_detalle, cerrar_sesion, actualizar_estado_pedido, confirmar_pago, editar_herramienta_inline, eliminar_herramienta_inline, crear_orden_despacho, obtener_ordenes_despacho, actualizar_estado_orden, confirmar_pago_admin3, registrar_entrega, redireccionar_view, eliminar_del_carrito, iniciar_pago, respuesta, pago_exitoso, pago_error, perfil_view,subir_herramienta
+from .views import contacto_view,agregar_al_carrito, PedidoViewSet, HerramientaViewSet, carrito_view, CategoriaViewSet, herramienta_api_view, pedidos_View, detalle_view,  productos_view, index_view, login_view, UserViewSet, register_view, login_admin, cambiar_contraseña_admin, admin1_view,  admin3_view, admin2_view, herramienta_detalle, cerrar_sesion, actualizar_estado_pedido, confirmar_pago, editar_herramienta_inline, eliminar_herramienta_inline, crear_orden_despacho, obtener_ordenes_despacho, actualizar_estado_orden, confirmar_pago_admin3, registrar_entrega, redireccionar_view, eliminar_del_carrito, iniciar_pago, respuesta, pago_exitoso, pago_error, perfil_view,subir_herramienta, admin0_view, agregar_herramienta_admin0, editar_categoria_admin0, editar_herramienta_admin0, eliminar_herramienta_admin0, eliminar_categoria_admin0, agregar_categoria_admin0, detalle_pedido_api  
 from . import views
 from rest_framework import routers
 from django.conf import settings
@@ -57,6 +57,14 @@ urlpatterns = [
     path('perfil/', perfil_view, name='perfil'),
     path('bodeguero/subir-herramienta/', subir_herramienta, name='subir_herramienta'),
     path('api/Herramienta/<str:pk>/', herramienta_api_view, name='api_herramienta'),
+    path('admin0/' , admin0_view, name='admin0'),
+    path('admin0/agregar_herramienta/', views.agregar_herramienta_admin0, name='agregar_herramienta'),
+    path('admin0/editar_herramienta/<str:pk>/', views.editar_herramienta_admin0, name='editar_herramienta'),
+    path('admin0/eliminar_herramienta/<str:pk>/', views.eliminar_herramienta_admin0, name='eliminar_herramienta'),
+    path('admin0/editar_categoria/<str:pk>/', views.editar_categoria_admin0, name='editar_categoria'),
+    path('admin0/eliminar_categoria/<str:pk>/', views.eliminar_categoria_admin0, name='eliminar_categoria'),
+    path('admin0/agregar_categoria/', views.agregar_categoria_admin0, name='agregar_categoria'),
+    path('api/pedidos/<int:pk>/detalle/', views.detalle_pedido_api, name='detalle_pedido_api'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
